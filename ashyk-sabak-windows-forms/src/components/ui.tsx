@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
+import { C, Decor, STAGE_THEME, type DecorKind } from './brand'
 import { AnimatePresence, motion } from 'motion/react'
 import { Image as ImageIcon, Lightbulb, Pause, Play, RotateCcw, Timer, X } from 'lucide-react'
 import { highlightLine } from '../lib/csharp'
@@ -11,36 +12,46 @@ import { stages } from '../config/lesson.config'
 export function SlideHeader({
   stage, title, subtitle, icon, right,
 }: { stage?: string; title: string; subtitle?: string; icon?: ReactNode; right?: ReactNode }) {
+  const [a, b] = useContext(ThemeCtx)
   return (
     <div className="flex items-start justify-between gap-8">
       <div className="flex items-center gap-6">
         {icon && (
           <motion.div
-            initial={{ scale: 0.6, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="grid h-[84px] w-[84px] shrink-0 place-items-center rounded-[24px] bg-gradient-to-br from-brand to-brand-dark text-white shadow-lift"
+            initial={{ scale: 0.5, opacity: 0, rotate: -20 }}
+            animate={{ scale: 1, opacity: 1, rotate: -6 }}
+            transition={{ type: 'spring', damping: 14 }}
+            className="grid h-[88px] w-[88px] shrink-0 place-items-center rounded-[26px] text-white"
+            style={{ background: `linear-gradient(140deg, ${a}, ${b})`, boxShadow: `0 16px 34px -14px ${a}` }}
           >
-            {icon}
+            <span className="rotate-6">{icon}</span>
           </motion.div>
         )}
         <div>
           {stage && (
             <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-1 text-[20px] font-semibold uppercase tracking-[0.14em] text-cyan"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="mb-2 inline-flex items-center gap-2 rounded-full px-4 py-1 text-[18px] font-bold uppercase tracking-[0.12em]"
+              style={{ background: `${a}1a`, color: a }}
             >
+              <span className="h-2 w-2 rounded-full" style={{ background: a }} />
               {stage}
             </motion.div>
           )}
           <motion.h1
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-[52px] font-extrabold leading-[1.08] tracking-tight text-navy"
+            className="text-[54px] font-extrabold leading-[1.06] tracking-tight text-navy"
           >
             {title}
           </motion.h1>
+          <motion.div
+            className="mt-2 h-[6px] rounded-full"
+            style={{ background: `linear-gradient(90deg, ${a}, ${b})` }}
+            initial={{ width: 0 }} animate={{ width: 120 }} transition={{ delay: 0.25, duration: 0.6 }}
+          />
           {subtitle && <p className="mt-2 text-[24px] text-muted">{subtitle}</p>}
         </div>
       </div>
@@ -285,7 +296,18 @@ export function Modal({ open, onClose, title, children, width = 1100 }: {
   )
 }
 
-/* ---------- Общая разметка слайда ---------- */
-export function Slide({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <div className={`absolute inset-0 flex flex-col px-20 pb-[84px] pt-[84px] ${className}`}>{children}</div>
+/* ---------- Общая разметка слайда: фон этапа + контент ---------- */
+const ThemeCtx = createContext<string[]>([C.blue, C.violet, C.teal])
+export const useTheme = () => useContext(ThemeCtx)
+
+export function Slide({ children, className = '', stage, decor }: { children: ReactNode; className?: string; stage?: StageId; decor?: DecorKind }) {
+  const theme = stage ? STAGE_THEME[stage] : { colors: [C.blue, C.violet, C.teal], decor: 'blobs' as DecorKind }
+  return (
+    <ThemeCtx.Provider value={theme.colors}>
+      <div className="absolute inset-0">
+        <Decor kind={decor ?? theme.decor} colors={theme.colors} />
+        <div className={`absolute inset-0 flex flex-col px-20 pb-[84px] pt-[84px] ${className}`}>{children}</div>
+      </div>
+    </ThemeCtx.Provider>
+  )
 }

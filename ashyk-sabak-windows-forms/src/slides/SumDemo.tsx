@@ -79,7 +79,7 @@ export default function SumDemo() {
   }
 
   return (
-    <Slide>
+    <Slide stage="demo">
       <SlideHeader stage="7 · Мысал №2" title="Екі санның қосындысын табу" icon={<Calculator size={44} />} />
       <div className="mt-6 grid flex-1 grid-cols-[700px_1fr] gap-9">
         <div className="flex flex-col">

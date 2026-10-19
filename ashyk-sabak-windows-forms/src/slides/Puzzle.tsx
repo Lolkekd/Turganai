@@ -3,6 +3,7 @@ import { ExternalLink, Eye, HelpCircle, Puzzle as PuzzleIcon, RotateCcw, Sparkle
 import { lessonInfo, puzzleHints } from '../config/lesson.config'
 import { useLesson, useSlideState } from '../store/useLesson'
 import { FormIcon, Slide, SlideHeader, TaskTimer } from '../components/ui'
+import { Burst, VsLogo } from '../components/brand'
 import { openExternal } from './Baamboozle'
 import { play } from '../lib/sound'
 
@@ -10,7 +11,7 @@ const COLS = 3
 const ROWS = 3
 const W = 1020
 const H = 660
-const TILE_COLORS = ['#1d4ed8', '#1e40af', '#2563eb', '#0e7490', '#1d4ed8', '#0891b2', '#1e3a8a', '#0d9488', '#2563eb']
+const TILE_COLORS = ['#2563eb', '#7c3aed', '#0fb5a6', '#f97316', '#fb7185', '#fbbf24', '#0ea5e9', '#a855f7', '#10b981']
 
 /** Путь кусочка пазла с «ушками» (чисто декоративная форма) */
 function piecePath(c: number, r: number, w: number, h: number) {
@@ -50,12 +51,13 @@ export default function Puzzle() {
   }
 
   return (
-    <Slide>
+    <Slide stage="puzzle">
       <SlideHeader stage="4 · LearningApps · 3 минут" title="Жасырын тақырып" icon={<PuzzleIcon size={44} />} />
       <div className="mt-6 grid flex-1 grid-cols-[1020px_1fr] gap-10">
         <div className="relative" style={{ width: W, height: H }}>
           {/* Скрытое изображение под пазлом */}
           <HiddenPicture revealed={revealed} />
+          <Burst trigger={revealed} />
           {/* Части пазла */}
           <svg width={W} height={H} className="absolute inset-0 overflow-visible">
             {puzzleHints.map((_, i) => {
@@ -161,8 +163,8 @@ function HiddenPicture({ revealed }: { revealed: boolean }) {
   return (
     <div className="absolute inset-0 overflow-hidden rounded-[18px] bg-gradient-to-br from-[#e8eef8] to-[#d6e2f3] shadow-inner">
       {/* строка меню VS */}
-      <div className="flex h-[54px] items-center gap-4 bg-[#2d2d30] px-6 text-[19px] text-white/80">
-        <span className="grid h-8 w-8 place-items-center rounded bg-[#68217a] text-[13px] font-bold text-white">VS</span>
+      <div className="flex h-[54px] items-center gap-4 bg-gradient-to-r from-[#7c3aed] to-[#2563eb] px-6 text-[19px] font-semibold text-white">
+        <VsLogo size={30} />
         Microsoft Visual Studio · C#
       </div>
       <div className="grid h-[606px] grid-cols-[190px_1fr_270px]">
@@ -184,7 +186,7 @@ function HiddenPicture({ revealed }: { revealed: boolean }) {
             {revealed && (
               <motion.div
                 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                className="absolute inset-x-6 bottom-6 rounded-2xl bg-navy/90 px-6 py-4 text-center text-[30px] font-extrabold leading-tight text-white"
+                className="absolute inset-x-6 bottom-6 rounded-2xl bg-gradient-to-r from-[#7c3aed]/95 to-[#2563eb]/95 px-6 py-4 text-center text-[30px] font-extrabold leading-tight text-white"
               >
                 {lessonInfo.topic}
               </motion.div>

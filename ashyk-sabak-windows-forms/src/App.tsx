@@ -7,6 +7,13 @@ import { stages, lessonInfo } from './config/lesson.config'
 import { TeacherPanel } from './components/TeacherPanel'
 import { useTick } from './components/ui'
 
+// Разные (спокойные) переходы между слайдами
+const TRANSITIONS = [
+  { from: (d: number) => ({ opacity: 0, x: d * 80 }), to: (d: number) => ({ opacity: 0, x: d * -80 }) },
+  { from: () => ({ opacity: 0, scale: 0.96, filter: 'blur(6px)' }), to: () => ({ opacity: 0, scale: 1.03, filter: 'blur(6px)' }) },
+  { from: (d: number) => ({ opacity: 0, y: d * 50 }), to: (d: number) => ({ opacity: 0, y: d * -40 }) },
+]
+
 const W = 1920
 const H = 1080
 
@@ -68,7 +75,7 @@ export default function App() {
   const isTitle = slide === 0
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-[#0b1430]">
+    <div className="relative h-full w-full overflow-hidden bg-gradient-to-br from-[#e6eefb] to-[#efe9fb]">
       <div
         className="stage-bg absolute left-1/2 top-1/2 overflow-hidden"
         style={{ width: W, height: H, transform: `translate(-50%, -50%) scale(${scale})`, transformOrigin: 'center center' }}
@@ -78,10 +85,10 @@ export default function App() {
             key={slide}
             custom={direction}
             className="absolute inset-0"
-            initial={{ opacity: 0, x: direction * 60 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: direction * -60 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            initial={TRANSITIONS[slide % 3].from(direction)}
+            animate={{ opacity: 1, x: 0, y: 0, scale: 1, filter: 'blur(0px)' }}
+            exit={TRANSITIONS[slide % 3].to(direction)}
+            transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
           >
             <Current />
           </motion.div>

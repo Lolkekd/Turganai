@@ -11,7 +11,7 @@ export default function BreakTime() {
   const [open, setOpen] = useSlideState<boolean[]>('break.open', breakTime.questions.map(() => false))
   const next = open.findIndex((o) => !o)
   return (
-    <Slide>
+    <Slide stage="break">
       {/* спокойный фон с медленными кругами */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {[0, 1, 2].map((i) => (
@@ -54,7 +54,7 @@ export default function BreakTime() {
         <AnimatePresence>
           {open.every(Boolean) && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className="flex flex-1 items-center gap-4 rounded-2xl bg-gradient-to-r from-navy to-brand px-8 py-5 text-[26px] font-semibold text-white shadow-lift">
+              className="flex flex-1 items-center gap-4 rounded-2xl bg-gradient-to-r from-[#fb7185] via-[#a855f7] to-[#2563eb] px-8 py-5 text-[26px] font-semibold text-white shadow-lift">
               <motion.span animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 3 }}><Sparkles size={32} className="text-cyan" /></motion.span>
               {breakTime.motto}
             </motion.div>

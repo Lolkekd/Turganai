@@ -17,7 +17,7 @@ export default function Assessment() {
   const hasCriteria = criteria.length > 0
 
   return (
-    <Slide>
+    <Slide stage="assessment">
       <SlideHeader stage="12 · Бағалау" title="Бағалау" icon={<Award size={44} />} right={<TaskTimer stage="assessment" compact />} />
       <div className="mt-6 grid flex-1 grid-cols-[480px_1fr] gap-9">
         <div className="flex flex-col gap-5">
@@ -81,8 +81,12 @@ export default function Assessment() {
           )}
           <div className="scroll-thin flex-1 overflow-y-auto px-6 py-3">
             {students.length === 0 && (
-              <div className="grid h-full place-items-center text-center text-[22px] text-muted">
-                Студенттер әлі қосылмаған.<br />«Студент қосу» батырмасын басып, аты-жөнін енгізіңіз.
+              <div className="flex h-full flex-col items-center justify-center gap-5 text-center text-[22px] text-muted">
+                <motion.div initial={{ scale: 0.6, rotate: -10 }} animate={{ scale: 1, rotate: -6 }} transition={{ type: 'spring' }}
+                  className="grid h-28 w-28 place-items-center rounded-[32px] text-white shadow-lift" style={{ background: 'linear-gradient(140deg, #fbbf24, #f97316 55%, #fb7185)' }}>
+                  <Award size={60} />
+                </motion.div>
+                <div>Студенттер әлі қосылмаған.<br />«Студент қосу» батырмасын басып, аты-жөнін енгізіңіз.</div>
               </div>
             )}
             <AnimatePresence initial={false}>

@@ -6,6 +6,10 @@ import { useLesson, useSlideState } from '../store/useLesson'
 import { CodeBlock, DemoNote, Modal, ProposalTag, Slide, SlideHeader, TaskTimer, WinWindow } from '../components/ui'
 import { WinDialog } from '../components/WinDialog'
 import { play } from '../lib/sound'
+import { C, VsLogo } from '../components/brand'
+
+const TAB_COLORS = [C.blue, C.violet, C.teal, C.orange]
+const STEP_COLORS = [C.blue, C.violet, C.teal, C.orange, C.coral, '#0ea5e9']
 
 interface PracticeDef {
   key: string
@@ -39,15 +43,21 @@ function PracticeSlide({ p }: { p: PracticeDef }) {
   const total = p.criteria.reduce((a, [, n]) => a + n, 0)
 
   return (
-    <Slide>
+    <Slide stage={p.stage}>
       <SlideHeader stage={p.stageLabel} title={p.title} icon={<Laptop size={44} />} right={<TaskTimer stage={p.stage} />} />
       <div className="mt-2 text-[19px] text-muted">{p.source}</div>
       <div className="mt-5 grid flex-1 grid-cols-[1000px_1fr] gap-9">
-        <div className="card flex flex-col overflow-hidden">
-          <div className="flex gap-1.5 border-b border-line bg-paper p-2">
-            {TABS.map((t) => (
+        <div className="flex flex-col overflow-hidden rounded-[22px] border-[3px] border-white bg-white shadow-lift">
+          {/* «рабочая область разработчика» */}
+          <div className="flex items-center gap-3 px-5 py-2.5 text-[17px] font-semibold text-white" style={{ background: `linear-gradient(90deg, ${C.violet}, ${C.blue})` }}>
+            <VsLogo size={26} /> {p.key === 'p1' ? 'ColorForm' : 'AboutMe'} — Microsoft Visual Studio
+            <span className="ml-auto flex gap-2"><span className="h-3 w-3 rounded-full bg-white/50" /><span className="h-3 w-3 rounded-full bg-white/50" /><span className="h-3 w-3 rounded-full bg-white/80" /></span>
+          </div>
+          <div className="flex gap-1 bg-[#eef2fb] px-3 pt-2">
+            {TABS.map((t, i) => (
               <button key={t.id} type="button" onClick={() => { setTab(t.id); play('click') }}
-                className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-3 text-[21px] font-semibold transition ${tab === t.id ? 'bg-white text-brand shadow-card' : 'text-muted hover:bg-white/60'}`}>
+                className={`flex flex-1 items-center justify-center gap-2 rounded-t-xl border-t-4 py-3 text-[21px] font-semibold transition ${tab === t.id ? 'bg-white' : 'border-transparent text-muted hover:bg-white/60'}`}
+                style={tab === t.id ? { borderColor: TAB_COLORS[i], color: TAB_COLORS[i] } : undefined}>
                 <t.icon size={22} /> {t.label}
               </button>
             ))}
@@ -58,7 +68,7 @@ function PracticeSlide({ p }: { p: PracticeDef }) {
                 <ol className="space-y-5">
                   {p.steps.map((s, i) => (
                     <motion.li key={i} initial={{ opacity: 0, x: -14 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }} className="flex items-start gap-4 text-[28px] leading-snug text-ink">
-                      <span className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand text-[21px] font-bold text-white">{i + 1}</span>
+                      <span className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-xl text-[21px] font-bold text-white" style={{ background: STEP_COLORS[i % STEP_COLORS.length] }}>{i + 1}</span>
                       <span dangerouslySetInnerHTML={{ __html: s }} />
                     </motion.li>
                   ))}

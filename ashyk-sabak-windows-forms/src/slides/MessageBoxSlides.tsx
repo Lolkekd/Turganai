@@ -68,7 +68,7 @@ export function MessageBoxTheory() {
   const [pressed, setPressed] = useState<string | null>(null)
 
   return (
-    <Slide>
+    <Slide stage="demo" decor="code">
       <SlideHeader stage="7 · Енгізу және шығару" title="Енгізу және шығару сұқбаттық терезелері" icon={<MessageSquareText size={44} />} />
       <div className="mt-6 grid flex-1 grid-cols-[820px_1fr] gap-9">
         <div className="flex flex-col gap-5">
@@ -95,7 +95,7 @@ export function MessageBoxTheory() {
           <div className="flex gap-1.5 rounded-2xl bg-white p-1.5 shadow-card">
             {TABS.map((t, i) => (
               <button key={t.id} type="button" onClick={() => { setTab(t.id); play('click') }}
-                className={`flex-1 rounded-xl px-2 py-2.5 text-[17px] font-semibold transition ${tab === t.id ? 'bg-navy text-white' : 'text-muted hover:bg-paper'}`}>
+                className={`flex-1 rounded-xl px-2 py-2.5 text-[17px] font-semibold transition ${tab === t.id ? 'bg-violet text-white' : 'text-muted hover:bg-paper'}`}>
                 <span className="mr-1 opacity-60">{i + 1}.</span>{t.label}
               </button>
             ))}
@@ -209,7 +209,7 @@ export function MessageBoxDemo() {
   const hl2 = ex2.open ? [6, 7, 8] : ex2.result === 'No' ? [9, 10, 11, 12] : ex2.result === 'Yes' ? [9] : []
 
   return (
-    <Slide>
+    <Slide stage="demo" decor="code">
       <SlideHeader stage="7 · MessageBox мысалдары" title="MessageBox.Show және DialogResult" icon={<MessageSquareText size={44} />} right={<DemoNote />} />
       <div className="mt-6 grid flex-1 grid-cols-2 gap-9">
         {/* Пример 1 */}

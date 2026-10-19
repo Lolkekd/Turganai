@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { ChevronLeft, ChevronRight, FolderPlus, Info, MousePointer2 } from 'lucide-react'
 import { useSlideState } from '../store/useLesson'
 import { DocFigure, FormIcon, Slide, SlideHeader } from '../components/ui'
+import { VsLogo, WinLogo } from '../components/brand'
 import { play } from '../lib/sound'
 
 const STEPS = [
@@ -17,7 +18,7 @@ export default function NewProject() {
   const [step, setStep] = useSlideState('newproject.step', 0)
   const go = (i: number) => { setStep(Math.max(0, Math.min(STEPS.length - 1, i))); play('click') }
   return (
-    <Slide>
+    <Slide stage="newTopic">
       <SlideHeader
         stage="6 · Жаңа тақырыпты түсіндіру"
         title="Visual Studio ортасында жаңа жоба құру"
@@ -60,7 +61,7 @@ export default function NewProject() {
         </div>
 
         <div className="flex flex-col">
-          <div className="relative flex-1 overflow-hidden rounded-[20px] border border-[#9aa9c0] bg-[#2b3a55] shadow-lift">
+          <div className="relative flex-1 overflow-hidden rounded-[20px] border-[3px] border-white bg-gradient-to-br from-[#e0ecff] to-[#efe6ff] shadow-lift">
             <AnimatePresence mode="wait">
               <motion.div key={step} className="absolute inset-0" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
                 {step === 0 && <StartMenu />}
@@ -98,7 +99,8 @@ function Cursor() {
 function StartMenu() {
   const items = ['Microsoft Office', 'Microsoft Visual Studio 2010 Express', 'Paint', 'Блокнот', 'Калькулятор']
   return (
-    <div className="absolute inset-0 bg-gradient-to-br from-[#1b4f8a] to-[#0b2a52]">
+    <div className="absolute inset-0 bg-gradient-to-br from-[#7dd3fc] via-[#60a5fa] to-[#a78bfa]">
+      <div className="absolute right-[120px] top-[80px] opacity-90"><WinLogo size={150} /></div>
       <div className="absolute bottom-12 left-0 w-[520px] rounded-tr-lg bg-[#f1f4f9] p-4 text-[21px] shadow-2xl" style={{ fontFamily: "'Segoe UI', var(--font-sans)" }}>
         <div className="mb-2 px-2 text-[15px] font-semibold text-[#555]">Все программы</div>
         {items.map((it) => (
@@ -111,27 +113,27 @@ function StartMenu() {
         </div>
         <div className="mt-3 border-t border-[#d5dbe5] pt-3 text-[16px] text-[#555]">🔍 Найти программы и файлы</div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 h-12 bg-[#0d2240]/90" />
+      <div className="absolute bottom-0 left-0 right-0 flex h-12 items-center gap-3 bg-white/75 px-4 backdrop-blur"><WinLogo size={26} /></div>
     </div>
   )
 }
 
 function StartPage() {
   return (
-    <div className="absolute inset-0 bg-[#293955] text-white" style={{ fontFamily: "'Segoe UI', var(--font-sans)" }}>
-      <div className="flex h-10 items-center gap-5 bg-[#bcc7d8] px-4 text-[16px] text-black">
+    <div className="absolute inset-0 bg-gradient-to-br from-[#f5f3ff] via-white to-[#e0e7ff] text-navy" style={{ fontFamily: "'Segoe UI', var(--font-sans)" }}>
+      <div className="flex h-10 items-center gap-5 bg-[#e4e9f7] px-4 text-[16px] text-black">
         <span className="rounded bg-white px-2 shadow">Файл</span><span>Правка</span><span>Вид</span><span>Отладка</span><span>Сервис</span><span>Окно</span><span>Справка</span>
       </div>
       <div className="p-10">
-        <div className="text-[40px] font-light">Microsoft<sup>®</sup> Visual C# 2010 Express</div>
+        <div className="flex items-center gap-4 text-[40px] font-light"><VsLogo size={56} /> Microsoft<sup>®</sup> Visual C# 2010 Express</div>
         <div className="mt-8 w-[380px] space-y-3 text-[24px]">
-          <motion.div className="relative rounded bg-white/15 px-4 py-2 ring-2 ring-[#ffd35c]" animate={{ boxShadow: ['0 0 0 0 #ffd35c66', '0 0 0 12px #ffd35c00'] }} transition={{ repeat: Infinity, duration: 1.4 }}>
+          <motion.div className="relative rounded-lg bg-white px-4 py-2 font-semibold text-violet shadow-card ring-2 ring-[#fbbf24]" animate={{ boxShadow: ['0 0 0 0 #fbbf2477', '0 0 0 12px #fbbf2400'] }} transition={{ repeat: Infinity, duration: 1.4 }}>
             📄 Создать проект…
             <Cursor />
           </motion.div>
-          <div className="px-4 py-2 text-white/70">📂 Открыть проект…</div>
+          <div className="px-4 py-2 text-muted">📂 Открыть проект…</div>
         </div>
-        <div className="mt-8 text-[18px] text-white/60">Последние проекты</div>
+        <div className="mt-8 text-[18px] text-muted">Последние проекты</div>
       </div>
     </div>
   )
@@ -140,7 +142,7 @@ function StartPage() {
 function NewProjectDialog({ step }: { step: number }) {
   const templates = ['Приложение Windows Forms', 'Приложение WPF', 'Консольное приложение', 'Библиотека классов']
   return (
-    <div className="absolute inset-0 grid place-items-center bg-[#293955]" style={{ fontFamily: "'Segoe UI', var(--font-sans)" }}>
+    <div className="absolute inset-0 grid place-items-center" style={{ fontFamily: "'Segoe UI', var(--font-sans)" }}>
       <div className="w-[1040px] overflow-hidden rounded border border-[#8796ae] bg-[#eef1f6] text-[20px] text-black shadow-2xl">
         <div className="bg-[#d3dbe7] px-4 py-2">Создать проект</div>
         <div className="grid grid-cols-[250px_1fr] gap-3 p-3">
@@ -202,8 +204,8 @@ function TypeText({ text }: { text: string }) {
 
 function Designer() {
   return (
-    <div className="absolute inset-0 grid grid-rows-[40px_1fr] bg-[#293955]" style={{ fontFamily: "'Segoe UI', var(--font-sans)" }}>
-      <div className="flex items-center gap-3 bg-[#bcc7d8] px-4 text-[16px] text-black">
+    <div className="absolute inset-0 grid grid-rows-[40px_1fr]" style={{ fontFamily: "'Segoe UI', var(--font-sans)" }}>
+      <div className="flex items-center gap-3 bg-[#e4e9f7] px-4 text-[16px] text-black">
         <span className="rounded-t bg-[#f5f6f8] px-3 py-1 font-semibold">Form1.cs [Конструктор]</span>
         <span className="text-[#333]">Program.cs</span>
       </div>

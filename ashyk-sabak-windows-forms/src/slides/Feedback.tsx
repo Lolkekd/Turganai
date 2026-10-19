@@ -17,7 +17,7 @@ export default function Feedback() {
   const vote = (i: number, d: number) => setSt({ ...st, votes: st.votes.map((v, j) => (j === i ? Math.max(0, v + d) : v)) })
 
   return (
-    <Slide>
+    <Slide stage="feedback">
       <SlideHeader stage="13 · Кері байланыс · 3 минут" title={`${feedback.method} әдісі`} icon={<span className="text-[44px]">🧰</span>} right={<TaskTimer stage="feedback" compact />} />
       <div className="mt-4 grid flex-1 grid-cols-[1fr_520px] gap-9">
         <div className="relative">

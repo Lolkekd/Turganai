@@ -3,6 +3,7 @@ import { MousePointerClick, Palette, Zap } from 'lucide-react'
 import { useSlideState } from '../store/useLesson'
 import { CodeBlock, DemoNote, DocFigure, Slide, SlideHeader, WinWindow } from '../components/ui'
 import { play } from '../lib/sound'
+import { CSharpLogo } from '../components/brand'
 
 // Код соответствует примеру №1 из Word-документа (Color.* = System.Drawing.Color.*)
 const CODE = `public partial class Form1 : Form
@@ -29,9 +30,9 @@ const CODE = `public partial class Form1 : Form
 }`
 
 const BUTTONS = [
-  { id: 'button1', text: 'Көк', color: '#00008B', name: 'DarkBlue', lines: [8, 9, 10, 11] },
-  { id: 'button2', text: 'Қызыл', color: '#FF0000', name: 'Red', lines: [13, 14, 15, 16] },
-  { id: 'button3', text: 'Сары', color: '#FFFF00', name: 'Yellow', lines: [18, 19, 20, 21] },
+  { id: 'button1', text: 'Көк', color: '#00008B', shade: '#000055', name: 'DarkBlue', lines: [8, 9, 10, 11] },
+  { id: 'button2', text: 'Қызыл', color: '#FF0000', shade: '#a30000', name: 'Red', lines: [13, 14, 15, 16] },
+  { id: 'button3', text: 'Сары', color: '#FFFF00', shade: '#c9b800', name: 'Yellow', lines: [18, 19, 20, 21] },
 ]
 
 export default function ColorDemo() {
@@ -40,7 +41,7 @@ export default function ColorDemo() {
   const hl = typeof last === 'number' ? BUTTONS[last].lines : []
 
   return (
-    <Slide>
+    <Slide stage="demo" decor="blobs">
       <SlideHeader stage="7 · Мысал №1" title="Батырма арқылы форманың түсін өзгерту" icon={<Palette size={44} />} />
       <div className="mt-6 grid flex-1 grid-cols-[420px_600px_1fr] gap-8">
         {/* Слева: свойства и событие Click */}
@@ -78,7 +79,7 @@ export default function ColorDemo() {
           <DemoNote />
           <div className="mt-4">
             <WinWindow title="Түстерді таңдау" width={600} bg={bg}>
-              <motion.div key={String(last)} initial={{ opacity: 0.6 }} animate={{ opacity: 1 }} className="flex h-[330px] items-start justify-between gap-4 px-8 pt-10">
+              <motion.div key={String(last)} initial={{ opacity: 0.6 }} animate={{ opacity: 1 }} className="flex h-[230px] items-start justify-between gap-4 px-8 pt-9">
                 {BUTTONS.map((b, i) => (
                   <button key={b.id} type="button" className="win-btn h-[52px] flex-1 text-[22px]" onClick={() => { setLast(i); play('click') }}>
                     {b.text}
@@ -87,11 +88,25 @@ export default function ColorDemo() {
               </motion.div>
             </WinWindow>
           </div>
-          <div className="mt-5 h-[96px] w-full">
+          {/* крупные цветные «пульты» — нажимают те же button1–3 */}
+          <div className="mt-5 grid w-full grid-cols-3 gap-4">
+            {BUTTONS.map((b, i) => (
+              <motion.button
+                key={b.id} type="button" whileTap={{ scale: 0.92, y: 4 }} whileHover={{ y: -4 }}
+                onClick={() => { setLast(i); play('click') }}
+                className="relative flex h-[96px] flex-col items-center justify-center rounded-[24px] font-extrabold"
+                style={{ background: b.color, color: i === 2 ? '#3b2f00' : 'white', boxShadow: `0 8px 0 ${b.shade}, 0 18px 30px -12px ${b.color}`, outline: last === i ? '4px solid white' : 'none' }}
+              >
+                <span className="text-[30px] leading-none">{b.text}</span>
+                <span className="mt-1 font-mono text-[15px] opacity-80">{b.id}</span>
+              </motion.button>
+            ))}
+          </div>
+          <div className="mt-4 h-[70px] w-full">
             <AnimatePresence mode="wait">
               {typeof last === 'number' ? (
                 <motion.div key={last} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                  className="flex items-center justify-center gap-3 rounded-2xl bg-white px-5 py-4 font-mono text-[19px] shadow-card">
+                  className="flex items-center justify-center gap-3 rounded-2xl bg-white px-5 py-3.5 font-mono text-[19px] shadow-card">
                   <span className="text-violet">{BUTTONS[last].id}.Click</span> →
                   <span className="text-[#795e26]">{BUTTONS[last].id}_Click()</span> →
                   <span className="inline-flex items-center gap-2 text-navy"><span className="h-5 w-5 rounded border border-black/20" style={{ background: BUTTONS[last].color }} />Color.{BUTTONS[last].name}</span>
@@ -116,7 +131,7 @@ export default function ColorDemo() {
 
         {/* Справа: C# код */}
         <div className="flex flex-col">
-          <div className="mb-2 text-[17px] font-semibold uppercase tracking-wider text-muted">Нақты C# коды (Windows Forms)</div>
+          <div className="mb-2 inline-flex items-center gap-2 text-[17px] font-bold uppercase tracking-wider text-violet"><CSharpLogo size={26} /> Нақты C# коды (Windows Forms)</div>
           <CodeBlock code={CODE} highlight={hl} fontSize={17} />
         </div>
       </div>

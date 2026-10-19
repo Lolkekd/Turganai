@@ -60,7 +60,7 @@ export default function ProjectFiles() {
   const [sel, setSel] = useSlideState<F>('files.sel', 'csproj')
   const f = FILES[sel]
   return (
-    <Slide>
+    <Slide stage="newTopic" decor="waves">
       <SlideHeader stage="6 · Жаңа тақырыпты түсіндіру" title="Жоба файлдары" icon={<Files size={44} />} />
       <div className="mt-7 grid flex-1 grid-cols-[640px_1fr] gap-9">
         <div className="card p-6">

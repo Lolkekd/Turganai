@@ -13,7 +13,7 @@ const APP_ICONS: Record<string, LucideIcon> = {
   MessageCircle, Camera, Play, Store, LayoutGrid, Send, Music, Ghost, Scissors, Clapperboard, Map: MapIcon, Bot,
 }
 
-export const TEAM_COLORS = ['#1d4ed8', '#0d9488'] as const
+export const TEAM_COLORS = ['#2563eb', '#0fb5a6'] as const
 
 const balanced = () => {
   const n = teamsConfig.apps.length
@@ -38,7 +38,7 @@ export default function Teams() {
   }
 
   return (
-    <Slide>
+    <Slide stage="teams">
       <SlideHeader stage="2 · Топқа бөлу" title={teamsConfig.prompt} icon={<Users size={44} />} />
       <div className="mt-8 grid flex-1 grid-cols-[1000px_1fr] gap-10">
         <div>
@@ -119,8 +119,8 @@ function TeamCard({ index, name, formed, apps }: { index: 0 | 1; name: string; f
       layout
       animate={formed ? { scale: [1, 1.03, 1] } : {}}
       transition={{ duration: 0.6, delay: index * 0.15 }}
-      className="card relative flex-1 overflow-hidden p-7"
-      style={formed ? { borderColor: color, boxShadow: `0 20px 40px -18px ${color}88` } : undefined}
+      className="relative flex-1 overflow-hidden rounded-[30px] bg-white p-7 shadow-card"
+      style={formed ? { boxShadow: `0 24px 46px -18px ${color}` } : { boxShadow: `inset 0 0 0 2px ${color}30, 0 14px 30px -20px #14306b66` }}
     >
       <motion.div
         className="absolute inset-y-0 left-0"
@@ -129,6 +129,7 @@ function TeamCard({ index, name, formed, apps }: { index: 0 | 1; name: string; f
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         style={{ background: `linear-gradient(135deg, ${color}, ${color}dd)` }}
       />
+      <span className="pointer-events-none absolute -bottom-10 right-4 select-none text-[220px] font-black leading-none" style={{ color: formed ? '#ffffff22' : `${color}14` }}>{index + 1}</span>
       <div className={`relative ${formed ? 'text-white' : ''}`}>
         <div className={`text-[20px] font-semibold uppercase tracking-[0.16em] ${formed ? 'text-white/80' : 'text-muted'}`}>{index + 1}-топ</div>
         <div className="mt-1 flex items-center gap-3">

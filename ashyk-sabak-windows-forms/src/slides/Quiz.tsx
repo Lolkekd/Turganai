@@ -3,12 +3,15 @@ import { Bomb, CheckCircle2, ChevronLeft, ChevronRight, ExternalLink, Graduation
 import { quiz } from '../config/lesson.config'
 import { useLesson, useSlideState } from '../store/useLesson'
 import { Slide, SlideHeader, TaskTimer } from '../components/ui'
+import { Burst } from '../components/brand'
 import { openExternal } from './Baamboozle'
 import { TEAM_COLORS } from './Teams'
 import { play } from '../lib/sound'
 
 interface QState { idx: number; picked: (number | null)[]; checked: boolean[] }
 const LETTERS = ['A', 'B', 'C', 'D']
+const SHAPES = ['▲', '◆', '●', '■']
+const OPT_COLORS = ['#2563eb', '#7c3aed', '#0fb5a6', '#f97316']
 
 export default function Quiz() {
   const link = useLesson((s) => s.links.genially)
@@ -35,17 +38,18 @@ export default function Quiz() {
   const go = (d: number) => setSt({ ...st, idx: Math.max(0, Math.min(quiz.length - 1, st.idx + d)) })
 
   return (
-    <Slide>
+    <Slide stage="consolidation">
       <SlideHeader stage="11 · Сабақты бекіту · Genially" title="Білімді бекіту" icon={<GraduationCap size={44} />} right={<TaskTimer stage="consolidation" compact />} />
       <div className="mt-6 grid flex-1 grid-cols-[1fr_440px] gap-9">
-        <div className="card flex flex-col p-8">
+        <div className="card relative flex flex-col p-8">
+          <Burst trigger={checked && picked === q.correct ? `ok-${st.idx}` : null} />
           <div className="flex items-center gap-2">
             {quiz.map((qq, i) => {
               const state = st.checked[i] ? (st.picked[i] === qq.correct ? 'ok' : 'bad') : i === st.idx ? 'now' : 'idle'
               return (
                 <button key={i} type="button" onClick={() => setSt({ ...st, idx: i })}
                   className={`h-10 flex-1 rounded-lg text-[17px] font-bold transition ${
-                    state === 'ok' ? 'bg-teal text-white' : state === 'bad' ? 'bg-[#ef4444] text-white' : state === 'now' ? 'bg-navy text-white' : 'bg-paper text-muted'
+                    state === 'ok' ? 'bg-teal text-white' : state === 'bad' ? 'bg-[#ef4444] text-white' : state === 'now' ? 'bg-violet text-white' : 'bg-paper text-muted'
                   } ${i === st.idx ? 'ring-4 ring-cyan/40' : ''}`}>
                   {i + 1}
                 </button>
@@ -60,17 +64,33 @@ export default function Quiz() {
               <div className="mt-6 grid grid-cols-2 gap-5">
                 {q.options.map((o, i) => {
                   const isCorrect = i === q.correct
-                  const reveal = checked || showAnswers
-                  const tone = checked
-                    ? isCorrect ? 'border-teal bg-teal/10' : i === picked ? 'border-[#ef4444] bg-[#ef4444]/10' : 'border-line opacity-60'
-                    : picked === i ? 'border-brand bg-brand/5 shadow-card' : 'border-line hover:border-brand/50 hover:bg-paper'
+                  const color = OPT_COLORS[i]
+                  const faded = checked && !isCorrect && i !== picked
+                  const wrong = checked && !isCorrect && i === picked
                   return (
-                    <motion.button key={i} type="button" onClick={() => pick(i)} whileTap={checked ? undefined : { scale: 0.98 }}
-                      className={`flex min-h-[112px] items-center gap-4 rounded-2xl border-2 px-5 py-4 text-left text-[25px] leading-snug transition ${tone} ${!checked && showAnswers && isCorrect ? 'ring-2 ring-teal/50' : ''}`}>
-                      <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl text-[20px] font-bold ${picked === i ? 'bg-brand text-white' : 'bg-paper text-navy'}`}>{LETTERS[i]}</span>
-                      <span className="flex-1 text-ink">{o}</span>
-                      {reveal && checked && isCorrect && <CheckCircle2 className="shrink-0 text-teal" size={30} />}
-                      {checked && !isCorrect && i === picked && <XCircle className="shrink-0 text-[#ef4444]" size={30} />}
+                    <motion.button
+                      key={i} type="button" onClick={() => pick(i)}
+                      initial={{ opacity: 0, y: 24, scale: 0.95 }}
+                      animate={wrong ? { opacity: 1, y: 0, scale: 1, x: [0, -12, 12, -8, 8, 0] } : { opacity: faded ? 0.35 : 1, y: 0, scale: picked === i && !checked ? 1.03 : 1 }}
+                      transition={{ delay: wrong ? 0 : i * 0.07, duration: wrong ? 0.45 : 0.35 }}
+                      whileHover={checked ? undefined : { y: -4 }}
+                      whileTap={checked ? undefined : { scale: 0.97 }}
+                      className="relative flex min-h-[124px] items-center gap-5 rounded-[26px] px-6 py-4 text-left text-[26px] font-semibold leading-snug text-white"
+                      style={{
+                        background: wrong ? '#94a3b8' : `linear-gradient(140deg, ${color}, ${color}d9)`,
+                        boxShadow: picked === i ? `0 0 0 5px white, 0 0 0 9px ${color}, 0 18px 30px -14px ${color}` : `0 7px 0 ${color}66, 0 16px 26px -16px ${color}`,
+                        outline: !checked && showAnswers && isCorrect ? '4px dashed white' : 'none', outlineOffset: -10,
+                      }}
+                    >
+                      <span className="pointer-events-none absolute bottom-1 right-4 text-[64px] leading-none text-white/15">{SHAPES[i]}</span>
+                      <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/25 text-[28px] font-black">{LETTERS[i]}</span>
+                      <span className="flex-1">{o}</span>
+                      {checked && isCorrect && (
+                        <motion.span initial={{ scale: 0, rotate: -90 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring' }} className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white" style={{ color }}>
+                          <CheckCircle2 size={34} />
+                        </motion.span>
+                      )}
+                      {wrong && <XCircle className="shrink-0 text-white" size={34} />}
                     </motion.button>
                   )
                 })}

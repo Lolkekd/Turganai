@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
-import { ExternalLink, Gamepad2, Link2, Minus, Plus, Trophy, Check } from 'lucide-react'
+import { ExternalLink, Gamepad2, Link2, Minus, Plus, Star, Trophy, Check } from 'lucide-react'
 import { useLesson } from '../store/useLesson'
 import { Slide, SlideHeader, TaskTimer } from '../components/ui'
 import { TEAM_COLORS } from './Teams'
@@ -18,39 +18,55 @@ export function TeamScoreboard({ big = true }: { big?: boolean }) {
   const set = useLesson((s) => s.setScore)
   const lead = scores[0] === scores[1] ? -1 : scores[0] > scores[1] ? 0 : 1
   return (
-    <div className="grid flex-1 grid-cols-2 gap-6">
+    <div className="relative grid flex-1 grid-cols-2 gap-8">
       {([0, 1] as const).map((i) => (
-        <div key={i} className="card relative flex flex-col justify-center overflow-hidden p-6 text-center" style={{ borderColor: `${TEAM_COLORS[i]}55` }}>
-          <div className="absolute inset-x-0 top-0 h-2" style={{ background: TEAM_COLORS[i] }} />
-          <div className="flex items-center justify-center gap-2 text-[18px] font-semibold uppercase tracking-[0.14em] text-muted">
-            {i + 1}-топ {lead === i && <Trophy size={20} className="text-amber" />}
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 40, rotate: i ? 3 : -3 }} animate={{ opacity: 1, y: 0, rotate: 0 }} transition={{ delay: 0.15 + i * 0.15, type: 'spring', damping: 16 }}
+          className="relative flex flex-col justify-center overflow-hidden rounded-[34px] p-6 text-center text-white"
+          style={{ background: GRADS[i], boxShadow: `0 26px 50px -22px ${TEAM_COLORS[i]}` }}
+        >
+          {/* декоративные звёзды */}
+          <Star className="absolute left-6 top-6 text-white/25" size={46} fill="currentColor" />
+          <Star className="absolute bottom-8 right-8 text-white/20" size={64} fill="currentColor" />
+          <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-white/10" />
+          <div className="relative flex items-center justify-center gap-2 text-[19px] font-bold uppercase tracking-[0.16em] text-white/80">
+            {i + 1}-топ {lead === i && <Trophy size={22} className="text-[#fde047]" />}
           </div>
-          <div className="truncate text-[38px] font-extrabold" style={{ color: TEAM_COLORS[i] }}>{names[i]}</div>
+          <div className="relative truncate text-[40px] font-extrabold">{names[i]}</div>
           <motion.input
             key={scores[i]}
-            initial={{ scale: 1.25 }} animate={{ scale: 1 }}
+            initial={{ scale: 1.3 }} animate={{ scale: 1 }} transition={{ type: 'spring', damping: 10 }}
             type="number" min={0} value={scores[i]} onChange={(e) => set(i, Number(e.target.value))}
-            className={`mx-auto block w-[220px] bg-transparent text-center font-mono font-extrabold tabular-nums text-navy outline-none ${big ? 'text-[170px] leading-[1.1]' : 'text-[72px]'}`}
+            className={`relative mx-auto block w-[260px] bg-transparent text-center font-mono font-black tabular-nums text-white outline-none drop-shadow-[0_6px_0_rgba(0,0,0,0.12)] ${big ? 'text-[170px] leading-[1.1]' : 'text-[72px]'}`}
           />
-          <div className="mt-2 flex justify-center gap-3">
-            <button type="button" className="btn btn-ghost h-14 w-14" onClick={() => add(i, -1)} aria-label="−1"><Minus /></button>
-            <button type="button" className="btn h-14 w-20 text-[22px] text-white" style={{ background: TEAM_COLORS[i] }} onClick={() => { add(i, 1); play('click') }}><Plus size={20} />1</button>
-            <button type="button" className="btn h-14 w-20 text-[22px] text-white" style={{ background: TEAM_COLORS[i] }} onClick={() => { add(i, 5); play('click') }}><Plus size={20} />5</button>
+          <div className="relative mt-2 flex justify-center gap-3">
+            <button type="button" className="btn h-14 w-14 bg-white/20 text-white hover:bg-white/30" onClick={() => add(i, -1)} aria-label="−1"><Minus /></button>
+            <button type="button" className="btn h-14 w-20 bg-white text-[22px]" style={{ color: TEAM_COLORS[i] }} onClick={() => { add(i, 1); play('click') }}><Plus size={20} />1</button>
+            <button type="button" className="btn h-14 w-20 bg-white text-[22px]" style={{ color: TEAM_COLORS[i] }} onClick={() => { add(i, 5); play('click') }}><Plus size={20} />5</button>
           </div>
-        </div>
+        </motion.div>
       ))}
+      <motion.div
+        initial={{ scale: 0, rotate: -30 }} animate={{ scale: 1, rotate: 0 }} transition={{ delay: 0.5, type: 'spring' }}
+        className="absolute left-1/2 top-1/2 z-10 grid h-[92px] w-[92px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-[6px] border-white text-[34px] font-black text-white shadow-lift"
+        style={{ background: 'linear-gradient(135deg, #fbbf24, #f97316)' }}
+      >
+        VS
+      </motion.div>
     </div>
   )
 }
+
+const GRADS = ['linear-gradient(150deg, #3b82f6, #2563eb 50%, #7c3aed)', 'linear-gradient(150deg, #2dd4bf, #0fb5a6 50%, #0ea5e9)']
 
 export default function Baamboozle() {
   const link = useLesson((s) => s.links.baamboozle)
   const setLink = useLesson((s) => s.setLink)
   const [edit, setEdit] = useState(false)
   return (
-    <Slide>
-      <div className="absolute inset-x-0 top-0 h-[300px] bg-gradient-to-b from-[#fde68a]/40 to-transparent" />
-      <div className="relative">
+    <Slide stage="homeworkCheck">
+            <div className="relative">
         <SlideHeader
           stage="3 · Baamboozle әдісі · 4 минут"
           title="Үй тапсырмасын тексеру"
