@@ -1,0 +1,127 @@
+@import '@fontsource-variable/inter/wght.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/700.css';
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, monospace;
+  --color-ink: #0f172a;
+  --color-muted: #475569;
+  --color-paper: #f4f7fb;
+  --color-line: #dbe3ee;
+  --color-navy: #0f2a5f;
+  --color-brand: #1d4ed8;
+  --color-brand-dark: #1e3a8a;
+  --color-teal: #0d9488;
+  --color-cyan: #0891b2;
+  --color-violet: #7c3aed;
+  --color-amber: #ea8a0c;
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -6px rgb(15 42 95 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(15 23 42 / 0.05), 0 18px 40px -12px rgb(15 42 95 / 0.25);
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #0b1430;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+input, textarea, select { user-select: text; }
+
+.stage-bg {
+  background:
+    radial-gradient(1200px 600px at 100% 0%, rgb(8 145 178 / 0.07), transparent 60%),
+    radial-gradient(900px 500px at 0% 100%, rgb(29 78 216 / 0.06), transparent 60%),
+    #f4f7fb;
+}
+
+.grid-dots {
+  background-image: radial-gradient(rgb(15 42 95 / 0.09) 1.2px, transparent 1.2px);
+  background-size: 28px 28px;
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--color-line);
+  border-radius: 22px;
+  box-shadow: var(--shadow-card);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 14px;
+  font-weight: 650;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease, opacity 0.2s;
+  cursor: pointer;
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn-primary {
+  background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+  color: white;
+  box-shadow: 0 10px 24px -10px rgb(29 78 216 / 0.7);
+}
+.btn-primary:hover:not(:disabled) { box-shadow: 0 14px 30px -10px rgb(29 78 216 / 0.85); transform: translateY(-1px); }
+.btn-ghost { background: white; border: 1px solid var(--color-line); color: var(--color-navy); }
+.btn-ghost:hover:not(:disabled) { background: #eef3fb; }
+.btn-teal { background: #0d9488; color: white; box-shadow: 0 10px 24px -12px rgb(13 148 136 / 0.8); }
+.btn-teal:hover:not(:disabled) { background: #0b8278; }
+
+/* Классические кнопки Windows Forms внутри демо-окон */
+.win-btn {
+  background: linear-gradient(#f6f6f6, #e3e3e3);
+  border: 1px solid #adadad;
+  border-radius: 3px;
+  color: #111;
+  font-family: 'Segoe UI', var(--font-sans);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.win-btn:hover { border-color: #0078d7; background: linear-gradient(#eaf4fc, #d9ecfb); }
+.win-btn:active { background: #cce4f7; }
+.win-btn:focus-visible { outline: 1px dotted #000; outline-offset: -4px; }
+
+.win-input {
+  border: 1px solid #7a7a7a;
+  background: white;
+  font-family: 'Segoe UI', var(--font-sans);
+  color: #111;
+  padding: 4px 8px;
+  outline: none;
+}
+.win-input:focus { border-color: #0078d7; }
+
+.scroll-thin { scrollbar-width: thin; scrollbar-color: #c4cfdf transparent; }
+
+kbd {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  padding: 1px 7px;
+  border-radius: 6px;
+  border: 1px solid var(--color-line);
+  border-bottom-width: 2px;
+  background: white;
+}
+
+/* Инлайн-код в инструкциях и подсказках */
+li code, p code, span > code:not([class]) {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: #eef2f8;
+  color: #4c1d95;
+  padding: 1px 7px;
+  border-radius: 6px;
+}
