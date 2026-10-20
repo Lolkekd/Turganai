@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'motion/react'
 import {
   AppWindow, Bot, Camera, Clapperboard, Ghost, LayoutGrid, Map as MapIcon, MessageCircle, Music, Pencil, Play,
-  PartyPopper, RotateCcw, Scissors, Send, Shuffle, Store, Users, type LucideIcon,
+  Handshake, PartyPopper, RotateCcw, Scissors, Send, Shuffle, Store, Users, type LucideIcon,
 } from 'lucide-react'
 import { teamsConfig } from '../config/lesson.config'
 import { useLesson, useSlideState } from '../store/useLesson'
@@ -39,7 +39,7 @@ export default function Teams() {
 
   return (
     <Slide stage="teams">
-      <SlideHeader stage="2 · Топқа бөлу" title={teamsConfig.prompt} icon={<Users size={44} />} />
+      <SlideHeader stage="2 · Топқа бөлу" title={teamsConfig.prompt} icon={<Users size={44} />} right={<TaskTimer stage="teams" compact />} />
       <div className="mt-8 grid flex-1 grid-cols-[1000px_1fr] gap-10">
         <div>
           <div className="grid grid-cols-4 gap-5">
@@ -87,23 +87,26 @@ export default function Teams() {
           {[0, 1].map((t) => (
             <TeamCard key={t} index={t as 0 | 1} name={names[t]} formed={formed} apps={teamsConfig.apps.filter((_, i) => open[i] && assign[i] === t).map((a) => a.name)} />
           ))}
-          <div className="flex items-center gap-4">
+          <AnimatePresence mode="wait">
             {!formed ? (
-              <button type="button" className="btn btn-primary h-16 flex-1 text-[24px]" onClick={() => { setFormed(true); play('success') }}>
-                <PartyPopper size={26} /> Топтарды бекіту
-              </button>
+              <motion.button key="btn" type="button" exit={{ opacity: 0, scale: 0.9 }} whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}
+                className="btn btn-primary h-[78px] w-full text-[26px] !rounded-[22px]" onClick={() => { setFormed(true); play('success') }}>
+                <PartyPopper size={28} /> Топтарды бекіту
+              </motion.button>
             ) : (
-              <AnimatePresence>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
-                  className="flex h-16 flex-1 items-center justify-center rounded-2xl bg-gradient-to-r from-brand to-teal text-[28px] font-bold text-white shadow-lift"
-                >
-                  🤝 {teamsConfig.wish}
-                </motion.div>
-              </AnimatePresence>
+              <motion.div
+                key="wish"
+                initial={{ opacity: 0, y: 20, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ type: 'spring', damping: 14 }}
+                className="relative flex h-[78px] w-full items-center justify-center gap-4 overflow-hidden whitespace-nowrap rounded-[22px] px-6 text-[28px] font-extrabold text-white"
+                style={{ background: 'linear-gradient(110deg, #2563eb, #7c3aed 50%, #0fb5a6)', boxShadow: '0 18px 34px -16px #7c3aed' }}
+              >
+                <motion.span className="absolute inset-y-0 -left-1/3 w-1/3 bg-white/25 blur-xl" animate={{ x: ['0%', '450%'] }} transition={{ duration: 1.6, delay: 0.4, ease: 'easeInOut' }} />
+                <motion.span initial={{ rotate: -20, scale: 0 }} animate={{ rotate: 0, scale: 1 }} transition={{ delay: 0.25, type: 'spring' }}
+                  className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/20"><Handshake size={30} /></motion.span>
+                {teamsConfig.wish}
+              </motion.div>
             )}
-            <TaskTimer stage="teams" compact />
-          </div>
+          </AnimatePresence>
         </div>
       </div>
     </Slide>
