@@ -14,7 +14,6 @@ import SumDemo from './SumDemo'
 import { MessageBoxTheory, MessageBoxTeamTask } from './MessageBoxSlides'
 import { SumTaskPractice } from './Practice'
 import FindError from './FindError'
-import OrgVideo from './OrgVideo'
 import BreakTime from './BreakTime'
 import Quiz from './Quiz'
 import Assessment from './Assessment'
@@ -26,7 +25,6 @@ export interface SlideDef { title: string; stage: StageId | null; Component: Com
 // Порядок слайдов = сценарий урока. stage связывает слайд с этапом и таймером.
 export const slides: SlideDef[] = [
   { title: 'Титулдық бет', stage: null, Component: Title },
-  { title: 'Бейнеролик (ЖИ)', stage: 'org', Component: OrgVideo },
   { title: 'Сәлемдесу', stage: 'org', Component: Greeting },
   { title: '«Адал азамат»', stage: 'org', Component: AdalAzamat },
   { title: 'Топқа бөлу', stage: 'teams', Component: Teams },

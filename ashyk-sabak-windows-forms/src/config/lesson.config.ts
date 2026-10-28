@@ -28,9 +28,6 @@ export const lessonInfo = {
   /** Фото преподавателя. Положите файл в public/images/teacher.jpg
    *  (в готовой сборке — presentation/images/teacher.jpg). */
   teacherPhoto: 'images/teacher.jpg',
-  /** Видео ИИ для этапа «Ұйымдастыру кезеңі». Положите файл в public/videos/org-video.mp4
-   *  (в готовой сборке — presentation/videos/org-video.mp4). Формат MP4 (H.264). */
-  orgVideo: 'videos/org-video.mp4',
 }
 
 /* ---------------------------------------------------------------------------
@@ -101,6 +98,10 @@ export const organization = {
       'Әр жобаны ұқыпты аяқтайды',
       'Командада бірге жұмыс істейді',
     ],
+    /** Видео ИИ, которое открывается по нажатию на карточку ценности.
+     *  Файлы: public/videos/adal-1.mp4 … adal-4.mp4
+     *  (в готовой сборке — presentation/videos/adal-1.mp4 … adal-4.mp4). Формат MP4 (H.264). */
+    videos: ['videos/adal-1.mp4', 'videos/adal-2.mp4', 'videos/adal-3.mp4', 'videos/adal-4.mp4'],
   },
 }
 

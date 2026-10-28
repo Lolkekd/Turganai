@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { motion } from 'motion/react'
-import { Check, Gavel, Hammer, Handshake, Quote, Scale, ShieldCheck, Sparkles, Code2 } from 'lucide-react'
+import { VideoModal } from '../components/VideoModal'
+import { Check, Play, Gavel, Hammer, Handshake, Quote, Scale, ShieldCheck, Sparkles, Code2 } from 'lucide-react'
 import { organization, lessonInfo } from '../config/lesson.config'
 import { useSlideState } from '../store/useLesson'
 import { FormIcon, Slide, SlideHeader, TaskTimer } from '../components/ui'
@@ -81,6 +83,7 @@ const VALUE_COLORS = [C.blue, C.teal, C.orange, C.violet]
 
 export function AdalAzamat() {
   const a = organization.adalAzamat
+  const [video, setVideo] = useState<number | null>(null)
   return (
     <Slide stage="org" decor="geo">
       <SlideHeader
@@ -93,13 +96,16 @@ export function AdalAzamat() {
           {a.values.map((v, i) => {
             const Icon = VALUE_ICONS[i]
             return (
-              <motion.div
+              <motion.button
+                type="button"
                 key={v}
+                onClick={() => { setVideo(i); play('reveal') }}
+                whileTap={{ scale: 0.97 }}
                 initial={{ opacity: 0, rotateX: -60, y: 30 }}
                 animate={{ opacity: 1, rotateX: 0, y: 0 }}
                 transition={{ delay: 0.15 + i * 0.14, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{ y: -6 }}
-                className="relative flex flex-col justify-center overflow-hidden p-9"
+                className="relative flex flex-col justify-center overflow-hidden p-9 text-left"
                 style={{ borderRadius: '36px 36px 36px 10px', background: `linear-gradient(150deg, white 30%, ${VALUE_COLORS[i]}1c)`, boxShadow: `inset 0 0 0 2px ${VALUE_COLORS[i]}2e, 0 18px 40px -24px ${VALUE_COLORS[i]}` }}
               >
                 <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full" style={{ background: `${VALUE_COLORS[i]}14` }} />
@@ -110,7 +116,10 @@ export function AdalAzamat() {
                 <div className="mt-4 flex items-center gap-2.5 text-[25px] text-muted">
                   <Code2 size={24} style={{ color: VALUE_COLORS[i] }} /> {a.valueHints[i]}
                 </div>
-              </motion.div>
+                <span className="absolute right-6 top-6 flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[16px] font-bold text-white" style={{ background: VALUE_COLORS[i] }}>
+                  <Play size={15} fill="white" /> Бейнеролик
+                </span>
+              </motion.button>
             )
           })}
         </div>
@@ -140,6 +149,8 @@ export function AdalAzamat() {
           </motion.div>
         </div>
       </div>
+      <VideoModal open={video !== null} src={video !== null ? a.videos[video] : ''} title={video !== null ? a.values[video] : ''}
+        color={video !== null ? VALUE_COLORS[video] : C.violet} onClose={() => setVideo(null)} />
     </Slide>
   )
 }
