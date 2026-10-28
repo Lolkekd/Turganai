@@ -4,7 +4,6 @@ import { useSlideState } from '../store/useLesson'
 import { CodeBlock, DemoNote, DocFigure, Slide, SlideHeader, WinWindow } from '../components/ui'
 import { play } from '../lib/sound'
 import { CSharpLogo } from '../components/brand'
-import { DOC } from '../assets/docImages'
 
 // Код соответствует примеру №1 из Word-документа (Color.* = System.Drawing.Color.*)
 const CODE = `public partial class Form1 : Form
@@ -69,8 +68,8 @@ export default function ColorDemo() {
               <li className="flex gap-2"><span className="font-bold text-violet">2.</span> Properties → <Zap size={17} className="inline text-amber" /> Оқиғалар → Click өрісін екі рет шерту.</li>
             </ol>
             <div className="mt-3 flex flex-wrap gap-2">
-              <DocFigure src={DOC.fig3} caption="3-сурет. Button1 компонентінің оқиғалары" label="3-сурет" />
-              <DocFigure src={DOC.fig4} caption="4-сурет. Түстерді таңдау жобасының орындалуы" label="4-сурет" />
+              <DocFigure src="images/doc/fig3-events.png" caption="3-сурет. Button1 компонентінің оқиғалары" label="3-сурет" />
+              <DocFigure src="images/doc/fig4-colors.png" caption="4-сурет. Түстерді таңдау жобасының орындалуы" label="4-сурет" />
             </div>
           </div>
         </div>
