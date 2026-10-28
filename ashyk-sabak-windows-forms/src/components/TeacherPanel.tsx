@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Clock, Eye, Link2, ListOrdered, RotateCcw, Settings, Users, Volume2, VolumeX, X } from 'lucide-react'
 import { slides } from '../slides'
-import { stages, type StageId } from '../config/lesson.config'
+import { lessonInfo, stages, type StageId } from '../config/lesson.config'
 import { timerElapsed, useLesson, type HomeworkVariant } from '../store/useLesson'
 import { useTick } from './ui'
 
@@ -144,7 +144,7 @@ function TimersTab() {
             <span className="w-6 text-center font-mono text-[14px] text-cyan">{i + 1}</span>
             <span className="flex-1">{st.title}{st.method ? <span className="text-muted"> · {st.method}</span> : null}</span>
             <input
-              type="number" min={0} max={90} value={minutes[st.id]}
+              type="number" min={0} max={lessonInfo.durationMin} value={minutes[st.id]}
               onChange={(e) => setM(st.id as StageId, Number(e.target.value))}
               className="w-20 rounded-lg border border-line px-2 py-1 text-center font-mono"
             />
@@ -152,8 +152,8 @@ function TimersTab() {
           </div>
         ))}
       </div>
-      <div className={`mt-3 rounded-xl px-4 py-2.5 font-semibold ${total === 90 ? 'bg-teal/10 text-teal' : 'bg-amber/10 text-[#9a5a06]'}`}>
-        Барлығы: {total} мин {total === 90 ? '✓' : '(90 минут болуы керек)'}
+      <div className={`mt-3 rounded-xl px-4 py-2.5 font-semibold ${total === lessonInfo.durationMin ? 'bg-teal/10 text-teal' : 'bg-amber/10 text-[#9a5a06]'}`}>
+        Барлығы: {total} мин {total === lessonInfo.durationMin ? '✓' : `(${lessonInfo.durationMin} минут болуы керек)`}
       </div>
     </div>
   )

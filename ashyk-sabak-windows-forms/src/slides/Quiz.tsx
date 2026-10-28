@@ -130,7 +130,7 @@ export default function Quiz() {
             <motion.div animate={{ rotate: [0, -8, 8, 0] }} transition={{ repeat: Infinity, duration: 2.5, repeatDelay: 2 }} className="grid h-20 w-20 place-items-center rounded-2xl bg-white/15">
               <Bomb size={46} />
             </motion.div>
-            <div className="mt-4 text-[30px] font-extrabold">Genially · Bomb quiz</div>
+            <div className="mt-4 text-[30px] font-extrabold">Genially тесті</div>
             <div className="text-[18px] text-white/75">Құжаттағы интерактивті тест · интернет қажет</div>
             <button type="button" disabled={!link} onClick={() => openExternal(link)} className="btn mt-5 h-14 w-full bg-white text-[21px] text-violet">
               <ExternalLink size={21} /> Genially тестін ашу

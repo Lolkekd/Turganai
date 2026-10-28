@@ -21,6 +21,8 @@ rmSync(zipPath, { force: true })
 mkdirSync(out, { recursive: true })
 cpSync(dist, join(out, 'presentation'), { recursive: true })
 rmSync(join(out, 'presentation', 'images', '.gitkeep'), { force: true })
+rmSync(join(out, 'presentation', 'videos', '.gitkeep'), { force: true })
+mkdirSync(join(out, 'presentation', 'videos'), { recursive: true })
 
 const crlf = (s) => s.replace(/\r?\n/g, '\r\n')
 
@@ -30,6 +32,16 @@ writeFileSync(
   crlf(`Положите фото преподавателя в эту папку под именем teacher.jpg
 (полный путь: presentation\\images\\teacher.jpg).
 Фото появится на титульном слайде автоматически. Рекомендуемая ориентация — вертикальная (3:4).
+`),
+)
+
+// Подсказка, куда положить видео ИИ для этапа «Ұйымдастыру кезеңі»
+writeFileSync(
+  join(out, 'presentation', 'videos', 'VIDEO-README.txt'),
+  crlf(`Положите видео ИИ в эту папку под именем org-video.mp4
+(полный путь: presentation\\videos\\org-video.mp4).
+Видео появится на слайде «Ұйымдастыру кезеңі» (сразу после титульного).
+Формат: MP4 (видео H.264, звук AAC) — так оно откроется в Edge и Chrome без интернета.
 `),
 )
 

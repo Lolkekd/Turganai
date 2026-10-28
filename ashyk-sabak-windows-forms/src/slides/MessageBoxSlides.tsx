@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { MessageSquareText, Play, RotateCcw } from 'lucide-react'
 import { useSlideState } from '../store/useLesson'
-import { CodeBlock, DemoNote, DocFigure, FormIcon, Slide, SlideHeader, WinWindow } from '../components/ui'
+import { CodeBlock, DemoNote, DocFigure, FormIcon, Slide, SlideHeader, TaskTimer, WinWindow } from '../components/ui'
 import { DialogBox, DialogIcon, WinDialog, type DlgIcon } from '../components/WinDialog'
 import { play } from '../lib/sound'
 
@@ -200,17 +200,21 @@ const EX2 = `private void Form1_FormClosing(object sender, FormClosingEventArgs 
     }
 }`
 
-export function MessageBoxDemo() {
-  const [ex1, setEx1] = useSlideState('mbd.ex1', { red: false, open: false, result: '' })
-  const [ex2, setEx2] = useSlideState('mbd.ex2', { closed: false, open: false, result: '' })
+export function MessageBoxDemo({ teamTask = false }: { teamTask?: boolean }) {
+  const [ex1, setEx1] = useSlideState(teamTask ? 'mbt.ex1' : 'mbd.ex1', { red: false, open: false, result: '' })
+  const [ex2, setEx2] = useSlideState(teamTask ? 'mbt.ex2' : 'mbd.ex2', { closed: false, open: false, result: '' })
   const [shake, setShake] = useState(0)
 
   const hl1 = ex1.open ? [3, 4, 5, 6, 7, 8, 9] : ex1.result === 'Yes' ? [10, 11] : ex1.result === 'No' ? [10] : []
   const hl2 = ex2.open ? [6, 7, 8] : ex2.result === 'No' ? [9, 10, 11, 12] : ex2.result === 'Yes' ? [9] : []
 
   return (
-    <Slide stage="demo" decor="code">
-      <SlideHeader stage="7 · MessageBox мысалдары" title="MessageBox.Show және DialogResult" icon={<MessageSquareText size={44} />} right={<DemoNote />} />
+    <Slide stage={teamTask ? 'practice2' : 'demo'} decor="code">
+      {teamTask ? (
+        <SlideHeader stage="9 · Топтық жұмыс · 2-топтың тапсырмасы" title="Форма бетінде хабарлама шығару" icon={<MessageSquareText size={44} />} right={<TaskTimer stage="practice2" compact />} />
+      ) : (
+        <SlideHeader stage="7 · MessageBox мысалдары" title="MessageBox.Show және DialogResult" icon={<MessageSquareText size={44} />} right={<DemoNote />} />
+      )}
       <div className="mt-6 grid flex-1 grid-cols-2 gap-9">
         {/* Пример 1 */}
         <div className="flex flex-col gap-4">
@@ -293,4 +297,9 @@ function ResultLine({ result, effect }: { result: string; effect: string }) {
       )}
     </div>
   )
+}
+
+/** 2-топтың тапсырмасы (новая редакция Word): хабарлама шығару және форманы жабуды растау */
+export function MessageBoxTeamTask() {
+  return <MessageBoxDemo teamTask />
 }

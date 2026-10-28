@@ -22,17 +22,20 @@ export const lessonInfo = {
   teacherRole: 'Оқытушы',
   group: 'АЖ-03-24', // [WORD]
   course: 3, // [ТЗ] в Word указан 2-й курс, актуальное значение — 3-й
-  durationMin: 90,
+  durationMin: 45, // [WORD, новая редакция] урок сокращён до 45 минут
   module: 'КМ 9. Деректер базасын басқару жүйелерін қолдану', // [WORD]
   environment: 'Microsoft Visual Studio · C# · Windows Forms',
   /** Фото преподавателя. Положите файл в public/images/teacher.jpg
    *  (в готовой сборке — presentation/images/teacher.jpg). */
   teacherPhoto: 'images/teacher.jpg',
+  /** Видео ИИ для этапа «Ұйымдастыру кезеңі». Положите файл в public/videos/org-video.mp4
+   *  (в готовой сборке — presentation/videos/org-video.mp4). Формат MP4 (H.264). */
+  orgVideo: 'videos/org-video.mp4',
 }
 
 /* ---------------------------------------------------------------------------
  *  ЭТАПЫ УРОКА И ТАЙМЕРЫ (минуты)
- *  Сумма = 90. Baamboozle 4 мин, LearningApps 3 мин, кері байланыс 3 мин — [WORD].
+ *  Сумма = 45. Baamboozle 4 мин, LearningApps 3 мин, кері байланыс 3 мин — [WORD].
  *  Остальное — [ТЗ] рекомендуемое распределение, свободно редактируется.
  * ------------------------------------------------------------------------- */
 export type StageId =
@@ -43,18 +46,18 @@ export type StageId =
 export interface Stage { id: StageId; title: string; minutes: number; method?: string }
 
 export const stages: Stage[] = [
-  { id: 'org', title: 'Ұйымдастыру кезеңі', minutes: 5 },
-  { id: 'teams', title: 'Топқа бөлу', minutes: 4 },
+  { id: 'org', title: 'Ұйымдастыру кезеңі', minutes: 3 },
+  { id: 'teams', title: 'Топқа бөлу', minutes: 2 },
   { id: 'homeworkCheck', title: 'Үй тапсырмасын тексеру', minutes: 4, method: 'Baamboozle' },
   { id: 'puzzle', title: 'Жасырын тақырып', minutes: 3, method: 'LearningApps' },
-  { id: 'goals', title: 'Сабақтың мақсаты мен жоспары', minutes: 3 },
-  { id: 'newTopic', title: 'Жаңа тақырыпты түсіндіру', minutes: 13 },
-  { id: 'demo', title: 'Интерфейс пен мысалдарды көрсету', minutes: 12 },
-  { id: 'practice1', title: 'Практикалық жұмыс №1', minutes: 16 },
-  { id: 'practice2', title: 'Практикалық жұмыс №2', minutes: 14 },
-  { id: 'break', title: 'Сергіту сәті', minutes: 5 },
-  { id: 'consolidation', title: 'Білімді бекіту', minutes: 5, method: 'Genially' },
-  { id: 'assessment', title: 'Бағалау', minutes: 2 },
+  { id: 'goals', title: 'Сабақтың мақсаты мен жоспары', minutes: 1 },
+  { id: 'newTopic', title: 'Жаңа тақырыпты түсіндіру', minutes: 7 },
+  { id: 'demo', title: 'Интерфейс пен мысалдарды көрсету', minutes: 6 },
+  { id: 'practice1', title: 'Практикалық жұмыс: «Қосу» формасы', minutes: 4 },
+  { id: 'practice2', title: 'Топтық жұмыс: «Қатені тап»', minutes: 5 },
+  { id: 'break', title: 'Сергіту сәті', minutes: 2, method: 'Мини-флешмоб' },
+  { id: 'consolidation', title: 'Білімді бекіту', minutes: 3, method: 'Genially' },
+  { id: 'assessment', title: 'Бағалау', minutes: 1 },
   { id: 'feedback', title: 'Кері байланыс', minutes: 3, method: 'Білім сандығы' },
   { id: 'finish', title: 'Үй тапсырмасы және қорытынды', minutes: 1 },
 ]
@@ -63,11 +66,9 @@ export const stages: Stage[] = [
  *  ВНЕШНИЕ ССЫЛКИ (можно изменить в панели преподавателя)
  * ------------------------------------------------------------------------- */
 export const links = {
-  // Адрес виден на скриншоте в Word (вкладка «Informatika | Baamboozle»).
-  // Проверьте, что это именно игра для этого урока.
-  baamboozle: 'https://www.baamboozle.com/classic/3671256',
+  baamboozle: 'https://www.baamboozle.com/game/4937714', // [WORD, новая редакция]
   learningApps: 'https://learningapps.org/display?v=psy2rey9k21', // [WORD]
-  genially: 'https://view.genially.com/68ecb098d746491c60514d10/interactive-content-bomb-quiz', // [WORD]
+  genially: 'https://view.genially.com/6adb30353d3e01e6f53986d3', // [WORD, новая редакция]
 }
 
 /* ---------------------------------------------------------------------------
@@ -155,14 +156,17 @@ export const goals = {
  *  ЭТАП 14. СЕРГІТУ СӘТІ [WORD] + вопросы [ТЗ]
  * ------------------------------------------------------------------------- */
 export const breakTime = {
-  topic: 'Жасанды интеллект – жас маманның жаңа құралы',
-  intro: 'Әр студент өз ойын бір немесе бірнеше сөйлеммен білдіреді.', // [WORD]
-  questions: [
-    'Жасанды интеллект бағдарламашыға қалай көмектеседі?',
-    'ЖИ құралдарының қандай артықшылықтары бар?',
-    'Бағдарламашы не үшін өз кодын тексеруі керек?',
+  // [WORD, новая редакция] «Бағдарламашының көңіл күйі» мини-флешмобы
+  topic: '«Бағдарламашының көңіл күйі»',
+  subtitle: 'Мини-флешмоб',
+  intro: 'Оқытушы жағдайды оқиды, студенттер көңіл күйін қимылмен көрсетеді.',
+  situations: [
+    { say: 'Кодым бірінші рет дұрыс жұмыс істеді!', move: 'қуанып қол шапалақтау' },
+    { say: 'Нүктелі үтірді ұмытып кеттім!', move: 'таңғалған кейіп таныту' },
+    { say: 'Button батырмасы жұмыс істемей тұр!', move: 'ойланып, иекті ұстау' },
+    { say: 'Қатені таптым!', move: 'жұдырықты түю' },
+    { say: 'Қосымшам дайын!', move: 'екі қолды көтеріп, жеңіс белгісін көрсету' },
   ],
-  motto: 'ЖИ — көмекші құрал. Шешімге және кодтың сапасына маман өзі жауап береді.', // [ПРЕДЛ.]
 }
 
 /* ---------------------------------------------------------------------------
@@ -315,6 +319,7 @@ export const assessment = {
   original: {
     title: '«Оқушы банкі» бағалау парағы', // [WORD] «Ученический банк»
     description: 'Әр студент сабақ бойы жинаған балын «Оқушы банкі» картасына жазады: Балл және Аты-жөні.',
+    leaderNote: 'Топтың басшысы топтағы студенттерді бағалау парағына бағалап отырады.', // [WORD, новая редакция]
     criteria: [] as Criterion[], // пусто: в Word критериев нет
   },
   proposed: {
@@ -322,8 +327,8 @@ export const assessment = {
     criteria: [
       { name: 'Үй тапсырмасы (Baamboozle)', max: 10 },
       { name: 'Жаңа тақырып бойынша белсенділік', max: 10 },
-      { name: 'Практикалық жұмыс №1 — түстер формасы', max: 30 },
-      { name: 'Практикалық жұмыс №2 — «Мен туралы» формасы', max: 30 },
+      { name: 'Практикалық жұмыс — «Қосу» формасы', max: 30 },
+      { name: 'Топтық жұмыс — «Қатені тап»', max: 30 },
       { name: 'Бекіту тесті', max: 15 },
       { name: 'Топпен жұмыс және тәртіп', max: 5 },
     ] as Criterion[],
@@ -387,4 +392,71 @@ export const conclusion = {
   quote: 'Әділдік – дұрыс шешім қабылдау, ал жауапкершілік – сол шешімнің нәтижесіне жауап беру.',
   final: 'Адал білім — сапалы бағдарлама, жауапты маман — сенімді болашақ!',
   thanks: 'Назарларыңызға рақмет!',
+}
+
+/* ---------------------------------------------------------------------------
+ *  ЭТАП 9. ТОПТЫҚ ЖҰМЫС: «ҚАТЕНІ ТАП» (ЖИ көмегімен) [WORD, новая редакция]
+ *  Ответы (answer) — [ПРЕДЛ.], показываются только по кнопке преподавателя.
+ * ------------------------------------------------------------------------- */
+export const findError = {
+  value: '«Әділдік пен жауапкершілік – біртұтас ұғым!» Білімалушылар өз кодын тексеріп, қателерін түзетіп, топтық жұмыста әр адамның үлесін әділ бағалайды.',
+  teams: [
+    {
+      code: `private void button1_Click(object sender, EventArgs e)
+{
+    int a = Convert.ToInt32(textBox1.Text);
+    int b = Convert.ToInt32(textBox2.Text);
+
+    int sum = a - b;
+
+    textBox3.Text = sum.ToString();
+}`,
+      questions: ['Бұл код қандай әрекетті орындауға арналған?', 'button1_Click әдісінің қызметі қандай?'],
+      errorLines: [6],
+      answer: [
+        '6-жол: айнымалы sum (қосынды) деп аталған, бірақ a - b айырма есептеледі. Дұрысы: int sum = a + b;',
+        'Код textBox1 мен textBox2-ге енгізілген екі санның қосындысын есептеп, textBox3-ке шығаруға арналған.',
+        'button1_Click — button1 батырмасы басылғанда орындалатын Click оқиғасының өңдегіші.',
+      ],
+      fixed: `int sum = a + b;`,
+    },
+    {
+      code: `private void button1_Click(object sender, EventArgs e)
+{
+    int a = 10;
+    int b = 20;
+
+    int sum = a * b;
+
+    label1.Text = sum;
+}`,
+      questions: ['Қай жолда қате бар?', 'Нәтижені Label компонентіне қалай дұрыс шығарамыз?'],
+      errorLines: [6, 8],
+      answer: [
+        '6-жол: қосынды үшін a * b емес, a + b болуы керек.',
+        '8-жол: int мәнін string түріндегі Text қасиетіне тікелей меншіктеуге болмайды (компиляция қатесі).',
+        'Дұрысы: label1.Text = sum.ToString();',
+      ],
+      fixed: `int sum = a + b;
+label1.Text = sum.ToString();`,
+    },
+  ],
+}
+
+/* ---------------------------------------------------------------------------
+ *  ЭТАП 8. ПРАКТИКАЛЫҚ ЖҰМЫС: «ҚОСУ» ФОРМАСЫ [WORD, новая редакция]
+ *  В Word список компонентов не приведён (нет таблицы) — состав ниже [ПРЕДЛ.].
+ * ------------------------------------------------------------------------- */
+export const sumTask = {
+  code: `private void button1_Click(object sender, EventArgs e)
+{
+    double a = Convert.ToDouble(textBox1.Text);
+    double b = Convert.ToDouble(textBox2.Text);
+
+    double sum = a + b;
+
+    textBox3.Text = sum.ToString();
+}`,
+  readOnlyNote: 'textBox3 компонентінің ReadOnly қасиетін True етіп орнатуға болады. Бұл нәтижені қолдан енгізуден қорғайды.',
+  responsibility: 'Студенттер тізімін жүргізуге арналған Windows қосымшасын құрастырғанда, барлық студенттің мәліметтері дұрыс енгізілуі, ақпараттың құпиялығы сақталуы және іздеу мен өңдеу батырмалары түсінікті орналасуы керек. Егер бағдарламада қате болса, оны жасыру емес, түзету – бағдарламашының жауапкершілігі.',
 }

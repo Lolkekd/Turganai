@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react'
-import { Award, CreditCard, Minus, Plus, Trash2, UserPlus, Wifi } from 'lucide-react'
+import { Award, Crown, CreditCard, Minus, Plus, Trash2, UserPlus, Wifi } from 'lucide-react'
 import { assessment } from '../config/lesson.config'
 import { useLesson, type Student } from '../store/useLesson'
 import { ProposalTag, Slide, SlideHeader, TaskTimer } from '../components/ui'
@@ -33,6 +33,9 @@ export default function Assessment() {
               ))}
             </div>
             <div className="mt-2 text-[15px] text-muted">Baamboozle мен тест кезінде жиналған ұпайлар</div>
+            <div className="mt-3 flex items-center gap-2.5 rounded-xl px-3 py-2 text-[16px] font-semibold leading-snug" style={{ background: '#fbbf2422', color: '#92400e' }}>
+              <Crown size={20} className="shrink-0" /> {assessment.original.leaderNote}
+            </div>
           </div>
 
           {/* Карточка «Оқушы банкі» как на рисунке в Word */}

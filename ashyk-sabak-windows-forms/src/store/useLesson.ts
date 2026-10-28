@@ -150,7 +150,7 @@ export const useLesson = create<LessonState>()(
       },
     }),
     {
-      name: 'ashyk-sabak-winforms-v1',
+      name: 'ashyk-sabak-winforms-v2',
       storage: safeStorage,
       partialize: ({ panelOpen: _p, ...rest }) => rest,
     },

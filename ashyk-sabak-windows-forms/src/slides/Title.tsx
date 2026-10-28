@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
-import { ArrowRight, CalendarClock, GraduationCap, Sparkles, UserRound, Users } from 'lucide-react'
+import { ArrowRight, GraduationCap, Sparkles, UserRound, Users } from 'lucide-react'
 import { lessonInfo } from '../config/lesson.config'
 import { useLesson } from '../store/useLesson'
 import { C, CSharpLogo, CodeChip, ComputerIllustration, VsLogo, WinLogo } from '../components/brand'
@@ -25,7 +25,6 @@ export default function Title() {
     { icon: UserRound, text: `Оқытушы: ${lessonInfo.teacher}`, color: C.blue },
     { icon: Users, text: `${lessonInfo.group} тобы`, color: C.violet },
     { icon: GraduationCap, text: `${lessonInfo.course}-курс`, color: C.teal },
-    { icon: CalendarClock, text: `${lessonInfo.durationMin} минут`, color: C.orange },
   ]
 
   return (

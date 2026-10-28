@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { FolderPlus, LayoutPanelLeft, FileCode2, MousePointerClick, PlayCircle, Target, Flag } from 'lucide-react'
-import { goals, stages } from '../config/lesson.config'
+import { goals, lessonInfo, stages } from '../config/lesson.config'
 import { useLesson } from '../store/useLesson'
 import { Slide, SlideHeader, TaskTimer } from '../components/ui'
 import { C, STAGE_THEME } from '../components/brand'
@@ -52,7 +52,7 @@ export default function Goals() {
       {/* Дорожная карта урока */}
       <div className="mt-auto">
         <div className="mb-4 flex items-center gap-3 text-[20px] font-semibold uppercase tracking-[0.16em] text-muted">
-          <Flag size={22} /> Сабақтың жол картасы · 90 минут
+          <Flag size={22} /> Сабақтың жол картасы · {lessonInfo.durationMin} минут
         </div>
         <div className="relative flex">
           <div className="absolute left-0 right-0 top-[26px] h-1.5 rounded-full bg-line" />

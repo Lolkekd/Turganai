@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { ClipboardList, Code2, Eye, EyeOff, LifeBuoy, ListChecks, Puzzle, Target, Award, Laptop } from 'lucide-react'
-import type { StageId } from '../config/lesson.config'
+import { sumTask, type StageId } from '../config/lesson.config'
 import { useLesson, useSlideState } from '../store/useLesson'
 import { CodeBlock, DemoNote, Modal, ProposalTag, Slide, SlideHeader, TaskTimer, WinWindow } from '../components/ui'
 import { WinDialog } from '../components/WinDialog'
@@ -13,6 +13,7 @@ const STEP_COLORS = [C.blue, C.violet, C.teal, C.orange, C.coral, '#0ea5e9']
 
 interface PracticeDef {
   key: string
+  project: string
   stage: StageId
   stageLabel: string
   title: string
@@ -50,7 +51,7 @@ function PracticeSlide({ p }: { p: PracticeDef }) {
         <div className="flex flex-col overflow-hidden rounded-[22px] border-[3px] border-white bg-white shadow-lift">
           {/* «рабочая область разработчика» */}
           <div className="flex items-center gap-3 px-5 py-2.5 text-[17px] font-semibold text-white" style={{ background: `linear-gradient(90deg, ${C.violet}, ${C.blue})` }}>
-            <VsLogo size={26} /> {p.key === 'p1' ? 'ColorForm' : 'AboutMe'} — Microsoft Visual Studio
+            <VsLogo size={26} /> {p.project} — Microsoft Visual Studio
             <span className="ml-auto flex gap-2"><span className="h-3 w-3 rounded-full bg-white/50" /><span className="h-3 w-3 rounded-full bg-white/50" /><span className="h-3 w-3 rounded-full bg-white/80" /></span>
           </div>
           <div className="flex gap-1 bg-[#eef2fb] px-3 pt-2">
@@ -175,204 +176,96 @@ function SampleCode({ code, forceShow }: { code: string; forceShow: boolean }) {
   )
 }
 
-/* ======================= №1: түстер ======================= */
-const P1_COLORS = [
-  { t: 'Жасыл', c: '#008000', n: 'Green' },
-  { t: 'Күлгін', c: '#800080', n: 'Purple' },
-  { t: 'Қызғылт', c: '#FF69B4', n: 'HotPink' },
-]
-
-function Practice1Demo() {
-  const [bg, setBg] = useSlideState('p1.bg', '#F0F0F0')
-  return (
-    <WinWindow title="Менің түстерім" bg={bg}>
-      <div className="flex h-[420px] items-start gap-4 p-7">
-        {P1_COLORS.map((c) => (
-          <button key={c.n} type="button" className="win-btn h-[50px] flex-1 text-[20px]" onClick={() => { setBg(c.c); play('click') }}>{c.t}</button>
-        ))}
-      </div>
-    </WinWindow>
-  )
-}
-
-export function Practice1() {
-  return (
-    <PracticeSlide
-      p={{
-        key: 'p1',
-        stage: 'practice1',
-        stageLabel: '8 · Практикалық жұмыс №1',
-        title: 'Өзіңізге ұнайтын түстермен ауысатын форма',
-        source: 'Құжаттағы тапсырма: «Өзіңізге ұнайтын түстермен ауысатын форманы құру бағдарламасы».',
-        steps: [
-          'Visual Studio-да жаңа <b>Windows Forms</b> жобасын құрыңыз.',
-          'Form1 формасының <b>Text</b> қасиетіне атау жазыңыз (мысалы, «Менің түстерім»).',
-          '<b>Toolbox</b>-тан формаға кемінде <b>3 Button</b> қойыңыз.',
-          'Әр батырманың <b>Text</b> қасиетіне өзіңіз таңдаған түстің атын жазыңыз.',
-          'Батырманы екі рет шертіп, <b>Click</b> оқиғасына <code>this.BackColor = Color.…;</code> кодын жазыңыз.',
-          'Жобаны сақтап, <b>F5</b> арқылы іске қосып тексеріңіз.',
-        ],
-        components: [
-          ['Form1', 'Text', 'Форма атауы'],
-          ['button1', 'Text, Click', '1-түс атауы'],
-          ['button2', 'Text, Click', '2-түс атауы'],
-          ['button3', 'Text, Click', '3-түс атауы'],
-          ['Form1', 'BackColor', 'Кодпен өзгереді'],
-        ],
-        requirements: [
-          'Кемінде үш түрлі түс қолданылады.',
-          'Батырмадағы жазу таңдалған түске сәйкес келеді.',
-          'Әр батырманың өз Click өңдегіші бар.',
-          'Бағдарлама қатесіз іске қосылады.',
-          'Жоба сақталады және мұғалімге көрсетіледі.',
-        ],
-        criteria: [
-          ['Жоба дұрыс құрылды', 5],
-          ['Компоненттер орналастырылды, Text қасиеттері берілді', 5],
-          ['Click оқиғалары дұрыс жазылды', 10],
-          ['Бағдарлама қатесіз іске қосылады', 5],
-          ['Интерфейс ұқыпты, шығармашылық', 5],
-        ],
-        hints: [
-          'Батырманы конструкторда <b>екі рет шертсеңіз</b>, <code>button1_Click</code> әдісі автоматты түрде құрылады.',
-          '<code>Color.</code> деп жазғанда IntelliSense тізімі шығады: <code>Color.Green</code>, <code>Color.Purple</code>, <code>Color.Orange</code>, <code>Color.HotPink</code>…',
-          'Код жолы нүктелі үтірмен аяқталуы керек: <code>this.BackColor = Color.Green;</code>',
-          'Қате болса, <b>Error List</b> (Список ошибок) терезесін қараңыз.',
-        ],
-        sample: `public partial class Form1 : Form
-{
-    public Form1()
-    {
-        InitializeComponent();
-    }
-
-    private void button1_Click(object sender, EventArgs e)
-    {
-        this.BackColor = Color.Green;     // Жасыл
-    }
-
-    private void button2_Click(object sender, EventArgs e)
-    {
-        this.BackColor = Color.Purple;    // Күлгін
-    }
-
-    private void button3_Click(object sender, EventArgs e)
-    {
-        this.BackColor = Color.HotPink;   // Қызғылт
-    }
-}`,
-        demo: <Practice1Demo />,
-      }}
-    />
-  )
-}
-
-/* ======================= №2: «Мен туралы» ======================= */
-const P2_FIELDS = [
-  { k: 'name', l: 'Аты-жөні', ph: 'Аты-жөніңіз' },
-  { k: 'group', l: 'Тобы', ph: 'Тобыңыз' },
-  { k: 'spec', l: 'Мамандығы', ph: 'Мамандығыңыз' },
-  { k: 'hobby', l: 'Қызығушылығы', ph: 'Қызығушылығыңыз' },
-] as const
-
-function Practice2Demo() {
-  const [v, setV] = useSlideState<Record<string, string>>('p2.values', {})
-  const [out, setOut] = useSlideState('p2.out', '')
-  const [warn, setWarn] = useState(false)
-  const show = () => {
-    if (!v.name?.trim() || !v.group?.trim()) { setWarn(true); play('error'); return }
-    setOut(P2_FIELDS.map((f) => `${f.l}: ${v[f.k]?.trim() || '—'}`).join('\n'))
+/* ======================= Практикалық жұмыс: «Қосу» формасы ======================= */
+function SumFormDemo() {
+  const [v, setV] = useSlideState('sumtask.v', { a: '', b: '', c: '' })
+  const [err, setErr] = useState(false)
+  const add = () => {
+    const a = Number(v.a.trim().replace(',', '.'))
+    const b = Number(v.b.trim().replace(',', '.'))
+    if (!v.a.trim() || !v.b.trim() || !Number.isFinite(a) || !Number.isFinite(b)) { setErr(true); play('error'); return }
+    const r = String(Number((a + b).toPrecision(15)))
+    setV({ ...v, c: v.a.includes(',') || v.b.includes(',') ? r.replace('.', ',') : r })
     play('success')
   }
   return (
     <div className="relative">
-      <WinWindow title="Мен туралы">
-        <div className="grid grid-cols-[1fr_250px] gap-4 p-6 text-[19px] text-[#111]">
-          <div className="space-y-4">
-            {P2_FIELDS.map((f) => (
-              <div key={f.k} className="grid grid-cols-[150px_1fr] items-center">
-                <span>{f.l}</span>
-                <input value={v[f.k] ?? ''} placeholder={f.ph} onChange={(e) => setV({ ...v, [f.k]: e.target.value })} className="win-input h-[44px] text-[19px] placeholder:text-[#aaa]" />
-              </div>
-            ))}
-            <div className="flex gap-3 pt-3">
-              <button type="button" className="win-btn h-[44px] flex-1 text-[18px] !border-[#0078d7]" onClick={show}>Ақпаратты көрсету</button>
-              <button type="button" className="win-btn h-[44px] w-[110px] text-[18px]" onClick={() => { setV({}); setOut('') }}>Тазалау</button>
+      <WinWindow title="Екі санды қосу">
+        <div className="space-y-5 px-9 py-8 text-[21px] text-[#111]">
+          {([['a', 'textBox1', 'Бірінші сан'], ['b', 'textBox2', 'Екінші сан']] as const).map(([k, name, label]) => (
+            <div key={k} className="grid grid-cols-[170px_1fr] items-center">
+              <span>{label}</span>
+              <input aria-label={name} value={v[k]} inputMode="decimal" onChange={(e) => setV({ ...v, [k]: e.target.value })}
+                onKeyDown={(e) => e.key === 'Enter' && add()} className="win-input h-[46px] text-[21px]" />
             </div>
+          ))}
+          <div className="grid grid-cols-[170px_1fr] items-center">
+            <span>Нәтиже</span>
+            <input aria-label="textBox3" value={v.c} readOnly title="ReadOnly = True" className="win-input h-[46px] cursor-not-allowed bg-[#f0f0f0] text-[21px] font-semibold" />
           </div>
-          <div className="whitespace-pre-wrap rounded border border-[#c8c8c8] bg-white p-3 text-[17px] leading-relaxed text-[#123]">
-            <div className="mb-1 text-[13px] text-[#888]">label5</div>
-            {out || <span className="text-[#aaa]">Нәтиже осында шығады</span>}
+          <div className="flex gap-4 pt-2">
+            <button type="button" className="win-btn h-[54px] w-[170px] text-[21px] !border-[#0078d7]" onClick={add}>Қосу</button>
+            <button type="button" className="win-btn h-[54px] w-[150px] text-[19px]" onClick={() => setV({ a: '', b: '', c: '' })}>Тазалау</button>
+            <span className="ml-auto self-center rounded-md bg-[#fff7d6] px-3 py-1 font-mono text-[15px] text-[#7a5b00]">textBox3.ReadOnly = True</span>
           </div>
         </div>
       </WinWindow>
-      <WinDialog open={warn} caption="Ескерту" icon="Warning" text="Аты-жөніңізді және тобыңызды енгізіңіз!" buttons={['OK']} onButton={() => setWarn(false)} />
+      <WinDialog open={err} caption="Қате" icon="Warning" text="Екі санды дұрыс енгізіңіз!" buttons={['OK']} onButton={() => setErr(false)} />
     </div>
   )
 }
 
-export function Practice2() {
+export function SumTaskPractice() {
   return (
     <PracticeSlide
       p={{
-        key: 'p2',
-        stage: 'practice2',
-        stageLabel: '9 · Практикалық жұмыс №2',
-        title: 'Өзі жайлы ақпарат шығатын жоба',
+        key: 'sumtask',
+        project: 'SumForm',
+        stage: 'practice1',
+        stageLabel: '8 · Практикалық жұмыс',
+        title: '«Қосу» батырмасы бар Windows формасы',
         source: (
           <span className="inline-flex flex-wrap items-center gap-3">
-            Құжаттағы тапсырма: «Әрбір студент өзі жайлы ақпарат шығатын жоба жасау».
-            <ProposalTag>Төмендегі іске асыру жолы — ұсынылған нұсқа, құжатта сипатталмаған</ProposalTag>
+            Құжаттағы тапсырма: Form1 бетіне компоненттерді қойып, «Қосу» батырмасына C# кодын жазу.
+            <ProposalTag>Компоненттер тізімі — ұсыныс (құжатта кесте берілмеген)</ProposalTag>
           </span>
         ),
         steps: [
-          'Жаңа Windows Forms жобасын құрып, Form1.Text = «Мен туралы» деп жазыңыз.',
-          'Формаға 4 <b>Label</b> қойыңыз: Аты-жөні, Тобы, Мамандығы, Қызығушылығы.',
-          'Әр Label-дің қасына <b>TextBox</b> қойыңыз (textBox1…textBox4).',
-          '<b>Button</b> қойып, Text = «Ақпаратты көрсету» деп жазыңыз.',
-          'Нәтижені шығару үшін тағы бір <b>Label</b> (label5) қойыңыз.',
-          'Click оқиғасында енгізілген мәтіндерді жинап, <code>label5.Text</code>-ке шығарыңыз. F5 — тексеру.',
+          'Visual Studio-да жаңа <b>Windows Forms</b> жобасын құрыңыз.',
+          'Form1 бетіне <b>3 TextBox</b>, <b>1 Button</b> және түсініктеме үшін <b>Label</b> қойыңыз.',
+          '<b>textBox3</b> компонентінің <b>ReadOnly</b> қасиетін <b>True</b> етіп орнатыңыз.',
+          'button1 батырмасының <b>Text</b> қасиетіне «Қосу» деп жазыңыз.',
+          '«Қосу» батырмасын екі рет шертіп, <code>button1_Click</code> әдісіне кодты жазыңыз.',
+          'Жобаны <b>F5</b> арқылы іске қосып, екі санның қосындысын тексеріңіз.',
         ],
         components: [
-          ['Form1', 'Text', 'Мен туралы'],
-          ['label1…label4', 'Text', 'Өріс атаулары'],
-          ['textBox1…textBox4', 'Text', 'Студент енгізеді'],
-          ['button1', 'Text, Click', 'Ақпаратты көрсету'],
-          ['label5', 'Text', 'Нәтиже шығады'],
+          ['textBox1', 'Text', 'Бірінші сан'],
+          ['textBox2', 'Text', 'Екінші сан'],
+          ['textBox3', 'ReadOnly', 'True — нәтиже'],
+          ['button1', 'Text, Click', 'Қосу'],
+          ['label1…label3', 'Text', 'Өріс атаулары'],
         ],
         requirements: [
-          'Төрт өріс бар: аты-жөні, тобы, мамандығы, қызығушылығы.',
-          'Батырманы басқанда енгізілген ақпарат толық шығады.',
-          'Бос өріс болса, бағдарлама қатесіз жұмыс істейді (ескерту шығуы мүмкін).',
-          'Компоненттер ұқыпты, тураланып орналасқан.',
+          'Екі сан енгізіліп, «Қосу» басылғанда қосынды textBox3-ке шығады.',
+          sumTask.readOnlyNote,
+          'Батырмалар мен өрістер түсінікті орналасқан.',
+          'Егер бағдарламада қате болса, оны жасыру емес, түзету – бағдарламашының жауапкершілігі.',
         ],
         criteria: [
-          ['Форма және компоненттер орналастырылды', 5],
-          ['Text қасиеттері дұрыс берілді', 5],
-          ['Click өңдегіші дұрыс жазылды', 10],
-          ['Ақпарат толық және дұрыс шығады', 5],
-          ['Безендіру, ұқыптылық', 5],
+          ['Компоненттер дұрыс орналастырылды', 5],
+          ['Қасиеттер берілді (Text, ReadOnly)', 5],
+          ['button1_Click коды дұрыс жазылды', 10],
+          ['Бағдарлама қатесіз іске қосылып, дұрыс есептейді', 5],
+          ['Интерфейс ұқыпты және түсінікті', 5],
         ],
         hints: [
-          'Мәтіндерді <code>+</code> белгісімен біріктіреміз: <code>"Тобы: " + textBox2.Text</code>',
-          'Жаңа жолға көшу үшін <code>"\\n"</code> немесе <code>Environment.NewLine</code> қолданыңыз.',
-          'Бос өрісті тексеру: <code>if (textBox1.Text == "")</code>',
-          'Нәтижені MessageBox арқылы да шығаруға болады: <code>MessageBox.Show(info, "Мен туралы");</code>',
+          'Батырманы конструкторда <b>екі рет шертсеңіз</b>, <code>button1_Click</code> әдісі автоматты түрде құрылады.',
+          'Мәтінді санға айналдыру: <code>Convert.ToDouble(textBox1.Text)</code>',
+          'Санды мәтінге айналдыру: <code>sum.ToString()</code>',
+          'ReadOnly қасиеті Properties терезесінде: <b>ReadOnly → True</b>.',
         ],
-        sample: `private void button1_Click(object sender, EventArgs e)
-{
-    if (textBox1.Text == "" || textBox2.Text == "")
-    {
-        MessageBox.Show("Аты-жөніңізді және тобыңызды енгізіңіз!", "Ескерту",
-            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        return;
-    }
-    label5.Text = "Аты-жөні: " + textBox1.Text + "\\n" +
-                  "Тобы: " + textBox2.Text + "\\n" +
-                  "Мамандығы: " + textBox3.Text + "\\n" +
-                  "Қызығушылығы: " + textBox4.Text;
-}`,
-        demo: <Practice2Demo />,
+        sample: sumTask.code,
+        demo: <SumFormDemo />,
       }}
     />
   )
