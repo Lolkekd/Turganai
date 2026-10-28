@@ -5,6 +5,7 @@ import { useSlideState } from '../store/useLesson'
 import { CodeBlock, DemoNote, DocFigure, FormIcon, Slide, SlideHeader, TaskTimer, WinWindow } from '../components/ui'
 import { DialogBox, DialogIcon, WinDialog, type DlgIcon } from '../components/WinDialog'
 import { play } from '../lib/sound'
+import { DOC } from '../assets/docImages'
 
 /* ======================= Теория ======================= */
 const SIGNATURE = `MessageBox.Show(string text,
@@ -220,7 +221,7 @@ export function MessageBoxDemo({ teamTask = false }: { teamTask?: boolean }) {
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="text-[26px] font-bold text-navy"><span className="text-cyan">Мысал №1.</span> Хабарлама шығару</div>
-            <DocFigure src="images/doc/fig6-message.png" caption="6-сурет. Хабарлама шығару" label="6-сурет" />
+            <DocFigure src={DOC.fig6} caption="6-сурет. Хабарлама шығару" label="6-сурет" />
           </div>
           <div className="relative h-[220px]">
             <WinWindow title="Form1" width={820}>
@@ -244,7 +245,7 @@ export function MessageBoxDemo({ teamTask = false }: { teamTask?: boolean }) {
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="text-[26px] font-bold text-navy"><span className="text-cyan">Мысал №2.</span> Форманы жабуды растау</div>
-            <DocFigure src="images/doc/fig7-closing.png" caption="7-сурет. Форманы жабуды растау" label="7-сурет" />
+            <DocFigure src={DOC.fig7} caption="7-сурет. Форманы жабуды растау" label="7-сурет" />
           </div>
           <div className="relative h-[220px]">
             <AnimatePresence mode="wait">

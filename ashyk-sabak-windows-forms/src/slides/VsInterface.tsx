@@ -6,6 +6,7 @@ import { DocFigure, FormIcon, Slide, SlideHeader } from '../components/ui'
 import { highlightLine } from '../lib/csharp'
 import { VsLogo } from '../components/brand'
 import { play } from '../lib/sound'
+import { DOC } from '../assets/docImages'
 
 type Zone = 'toolbox' | 'designer' | 'code' | 'solution' | 'properties'
 
@@ -153,7 +154,7 @@ export default function VsInterface() {
               </motion.div>
             )}
           </AnimatePresence>
-          <DocFigure src="images/doc/fig2-interface.png" caption="2-сурет. Бағдарлама интерфейсі (құжаттан)" label="2-сурет: бағдарлама интерфейсі" />
+          <DocFigure src={DOC.fig2} caption="2-сурет. Бағдарлама интерфейсі (құжаттан)" label="2-сурет: бағдарлама интерфейсі" />
         </div>
       </div>
     </Slide>

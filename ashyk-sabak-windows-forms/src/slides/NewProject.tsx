@@ -4,6 +4,7 @@ import { useSlideState } from '../store/useLesson'
 import { DocFigure, FormIcon, Slide, SlideHeader } from '../components/ui'
 import { VsLogo, WinLogo } from '../components/brand'
 import { play } from '../lib/sound'
+import { DOC } from '../assets/docImages'
 
 const STEPS = [
   { t: 'Visual Studio бағдарламасын ашу', d: 'Іске қосу → Бағдарламалар → Microsoft Visual Studio → Microsoft Visual C# 2010 командасын орындаймыз.' },
@@ -56,7 +57,7 @@ export default function NewProject() {
             <button type="button" className="btn btn-primary h-14 flex-1 text-[21px]" disabled={step === STEPS.length - 1} onClick={() => go(step + 1)}>
               Келесі қадам <ChevronRight />
             </button>
-            <DocFigure src="images/doc/fig1-new-project.png" caption="1-сурет. Жаңа жоба құру терезесі (Visual C# 2010)" label="1-сурет" />
+            <DocFigure src={DOC.fig1} caption="1-сурет. Жаңа жоба құру терезесі (Visual C# 2010)" label="1-сурет" />
           </div>
         </div>
 

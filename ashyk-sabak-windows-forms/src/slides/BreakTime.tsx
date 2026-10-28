@@ -5,6 +5,7 @@ import { useSlideState } from '../store/useLesson'
 import { DocFigure, Slide, SlideHeader, TaskTimer } from '../components/ui'
 import { Burst, C } from '../components/brand'
 import { play } from '../lib/sound'
+import { DOC } from '../assets/docImages'
 
 // «Бағдарламашының көңіл күйі» мини-флешмобы [WORD]
 const ICONS = [Laugh, Frown, Brain, HandFist, Trophy]
@@ -102,10 +103,10 @@ export default function BreakTime() {
         {/* иллюстрация из Word */}
         <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="flex flex-col gap-4">
           <div className="overflow-hidden rounded-[30px] border-[5px] border-white bg-white shadow-lift">
-            <img src="images/doc/flashmob.jpg" alt="Бағдарламашының көңіл күйі — мини-флешмоб" className="w-full" />
+            <img src={DOC.flashmob} alt="Бағдарламашының көңіл күйі — мини-флешмоб" className="w-full" />
           </div>
           <div className="flex items-center gap-3">
-            <DocFigure src="images/doc/flashmob.jpg" caption="«Бағдарламашының көңіл күйі» мини-флешмобы (құжаттан)" label="Үлкейту" />
+            <DocFigure src={DOC.flashmob} caption="«Бағдарламашының көңіл күйі» мини-флешмобы (құжаттан)" label="Үлкейту" />
           </div>
         </motion.div>
       </div>

@@ -5,6 +5,7 @@ import { useSlideState } from '../store/useLesson'
 import { CodeBlock, DemoNote, DocFigure, Modal, ProposalTag, Slide, SlideHeader, WinWindow } from '../components/ui'
 import { WinDialog } from '../components/WinDialog'
 import { play } from '../lib/sound'
+import { DOC } from '../assets/docImages'
 
 // Код примера №2 из Word-документа
 const CODE = `public partial class Form1 : Form
@@ -134,7 +135,7 @@ export default function SumDemo() {
             <button type="button" className="btn btn-ghost h-12 px-4 text-[17px]" onClick={() => setSafe(true)}>
               <ShieldAlert size={19} className="text-amber" /> Қате енгізу болса?
             </button>
-            <DocFigure src="images/doc/fig5-sum.png" caption="5-сурет. Екі санның қосындысын табу жобасының орындалуы" label="5-сурет" />
+            <DocFigure src={DOC.fig5} caption="5-сурет. Екі санның қосындысын табу жобасының орындалуы" label="5-сурет" />
             <div className="ml-auto text-right text-[16px] leading-tight text-muted">Name: button_eseptey,<br />button_close, button_clear</div>
           </div>
         </div>
