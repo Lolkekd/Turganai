@@ -24,7 +24,7 @@ export default function BreakTime() {
       <SlideHeader stage={`10 · Сергіту сәті · ${breakTime.subtitle}`} title={breakTime.topic} icon={<Music size={44} />} right={<TaskTimer stage="break" compact />} />
       <p className="mt-3 text-[24px] text-muted">{breakTime.intro}</p>
 
-      <div className="mt-6 grid flex-1 grid-cols-[1fr_560px] gap-9">
+      <div className="mt-6 grid flex-1 grid-cols-[1fr_620px] gap-9">
         <div className="flex flex-col">
           {/* текущая ситуация */}
           <div className="relative flex-1">
@@ -99,13 +99,45 @@ export default function BreakTime() {
           </div>
         </div>
 
-        {/* иллюстрация из Word */}
+        {/* персонаж текущей ситуации (фрагмент коллажа из Word) */}
         <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="flex flex-col gap-4">
-          <div className="overflow-hidden rounded-[30px] border-[5px] border-white bg-white shadow-lift">
-            <img src="images/doc/flashmob.jpg" alt="Бағдарламашының көңіл күйі — мини-флешмоб" className="w-full" />
+          <div className="relative flex-1 overflow-hidden rounded-[34px] border-[6px] border-white bg-white shadow-lift"
+            style={{ boxShadow: `0 26px 50px -26px ${color}` }}>
+            <AnimatePresence initial={false}>
+              {cur ? (
+                <motion.img
+                  key={cur.image}
+                  src={cur.image}
+                  alt={`${idx + 1}-жағдай: ${cur.say}`}
+                  className="absolute inset-0 h-full w-full object-contain p-2"
+                  initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.03 }}
+                  transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                />
+              ) : (
+                <motion.div key="start" className="absolute inset-0 grid place-items-center"
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+                  {/* веер из пяти карточек-превью */}
+                  <div className="relative h-[300px] w-[420px]">
+                    {breakTime.situations.map((s, i) => (
+                      <img key={s.image} src={s.image} alt="" className="absolute left-1/2 top-1/2 h-[220px] w-[190px] rounded-[20px] border-4 border-white object-cover shadow-card"
+                        style={{ transform: `translate(-50%, -50%) translateX(${(i - 2) * 62}px) rotate(${(i - 2) * 7}deg)`, zIndex: 5 - Math.abs(i - 2) }} />
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            {cur && (
+              <span className="absolute left-4 top-4 z-10 rounded-full px-4 py-1.5 text-[18px] font-bold text-white" style={{ background: color }}>
+                {idx + 1}-жағдай
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-3">
-            <DocFigure src="images/doc/flashmob.jpg" caption="«Бағдарламашының көңіл күйі» мини-флешмобы (құжаттан)" label="Үлкейту" />
+            {cur ? (
+              <DocFigure key={cur.image} src={cur.image} caption={`${idx + 1}-жағдай: «${cur.say}» — ${cur.move}`} label="Үлкейту" />
+            ) : (
+              <span className="text-[18px] text-muted">«Бастау» батырмасын басыңыз</span>
+            )}
           </div>
         </motion.div>
       </div>

@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { C, Decor, STAGE_THEME, type DecorKind } from './brand'
 import { AnimatePresence, motion } from 'motion/react'
 import { Image as ImageIcon, Lightbulb, Pause, Play, RotateCcw, Timer, X } from 'lucide-react'
@@ -238,15 +239,19 @@ export function TaskTimer({ stage, compact = false, label }: { stage: StageId; c
 /* ---------- Рисунок из Word-документа ---------- */
 export function DocFigure({ src, caption, label = 'Құжаттағы сурет' }: { src: string; caption: string; label?: string }) {
   const [open, setOpen] = useState(false)
-  return (
-    <>
-      <button type="button" className="btn btn-ghost h-12 px-4 text-[17px]" onClick={() => setOpen(true)}>
-        <ImageIcon size={19} /> {label}
-      </button>
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open])
+  // окно выводится в слой поверх таймера и навигации
+  const root = typeof document !== 'undefined' ? document.getElementById('stage-overlay-root') : null
+  const overlay = (
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-50 grid place-items-center bg-navy/60 p-16 backdrop-blur-sm"
+            className="pointer-events-auto absolute inset-0 grid place-items-center bg-navy/60 p-16 backdrop-blur-sm"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setOpen(false)}
           >
@@ -254,7 +259,7 @@ export function DocFigure({ src, caption, label = 'Құжаттағы сурет
               initial={{ scale: 0.92, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0 }}
               className="card max-h-full max-w-full p-5" onClick={(e) => e.stopPropagation()}
             >
-              <img src={src} alt={caption} className="max-h-[820px] max-w-[1500px] rounded-lg object-contain" />
+              <img src={src} alt={caption} className="h-[820px] w-auto max-w-[1500px] rounded-lg object-contain" />
               <figcaption className="mt-3 flex items-center justify-between gap-6 text-[20px] text-muted">
                 <span>{caption}</span>
                 <button type="button" className="btn btn-ghost h-11 px-4" onClick={() => setOpen(false)}>
@@ -265,6 +270,13 @@ export function DocFigure({ src, caption, label = 'Құжаттағы сурет
           </motion.div>
         )}
       </AnimatePresence>
+  )
+  return (
+    <>
+      <button type="button" className="btn btn-ghost h-12 px-4 text-[17px]" onClick={() => setOpen(true)}>
+        <ImageIcon size={19} /> {label}
+      </button>
+      {root ? createPortal(overlay, root) : overlay}
     </>
   )
 }
