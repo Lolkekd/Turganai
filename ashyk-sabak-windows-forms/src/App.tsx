@@ -53,6 +53,8 @@ export default function App() {
       const el = e.target as HTMLElement
       if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.isContentEditable)) return
       if (e.ctrlKey || e.altKey || e.metaKey) return
+      // пока открыто окно слайда (группа, колесо), стрелки не листают слайды
+      if (document.getElementById('stage-overlay-root')?.childElementCount && e.key !== 't' && e.key !== 'T') return
       const s = useLesson.getState()
       const cur = Math.min(s.slide, slides.length - 1)
       switch (e.key) {
@@ -96,6 +98,8 @@ export default function App() {
 
         {!isTitle && <BottomBar />}
         <TopControls isFs={isFs} />
+        {/* слой для окон слайдов, которые должны перекрывать таймер и навигацию */}
+        <div id="stage-overlay-root" className="pointer-events-none absolute inset-0 z-[45]" />
         <TeacherPanel open={panelOpen} onClose={() => setPanel(false)} />
       </div>
     </div>

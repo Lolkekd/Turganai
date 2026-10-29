@@ -194,9 +194,10 @@ function LinksTab() {
   const links = useLesson((s) => s.links)
   const setLink = useLesson((s) => s.setLink)
   const rows: { k: keyof typeof links; label: string; note: string }[] = [
-    { k: 'baamboozle', label: 'Baamboozle', note: 'Құжаттағы скриншоттан алынды — ойынның дұрыс екенін тексеріңіз.' },
+    { k: 'baamboozle', label: 'Baamboozle', note: 'Құжаттан алынды.' },
     { k: 'learningApps', label: 'LearningApps (пазл)', note: 'Құжаттан алынды.' },
     { k: 'genially', label: 'Genially (тест)', note: 'Құжаттан алынды.' },
+    { k: 'wheel', label: 'Сәттілік дөңгелегі (Wheel of Names)', note: '«Топқа бөлу» слайдындағы дөңгелек.' },
   ]
   return (
     <div className="space-y-4">

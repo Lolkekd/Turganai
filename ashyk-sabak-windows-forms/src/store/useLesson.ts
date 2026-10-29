@@ -14,6 +14,7 @@ interface LessonState {
   links: typeof defaultLinks
   stageMinutes: Record<StageId, number>
   teamNames: [string, string]
+  teamMembers: [string[], string[]]
   teamScores: [number, number]
   sound: boolean
   showAnswers: boolean
@@ -32,6 +33,7 @@ interface LessonState {
   setLink: (k: keyof typeof defaultLinks, v: string) => void
   setStageMinutes: (id: StageId, m: number) => void
   setTeamName: (i: 0 | 1, v: string) => void
+  setTeamMembers: (i: 0 | 1, list: string[]) => void
   addScore: (i: 0 | 1, delta: number) => void
   setScore: (i: 0 | 1, v: number) => void
   timerToggle: (key: string) => void
@@ -53,6 +55,7 @@ const initial = () => ({
   links: { ...defaultLinks },
   stageMinutes: { ...defaultMinutes },
   teamNames: [...teamsConfig.defaultNames] as [string, string],
+  teamMembers: [[...teamsConfig.defaultMembers[0]], [...teamsConfig.defaultMembers[1]]] as [string[], string[]],
   teamScores: [0, 0] as [number, number],
   sound: true,
   showAnswers: false,
@@ -107,6 +110,11 @@ export const useLesson = create<LessonState>()(
         n[i] = v
         set({ teamNames: n })
       },
+      setTeamMembers: (i, list) => {
+        const m = [...get().teamMembers] as [string[], string[]]
+        m[i] = list
+        set({ teamMembers: m })
+      },
       addScore: (i, d) => {
         const s = [...get().teamScores] as [number, number]
         s[i] = Math.max(0, s[i] + d)
@@ -140,6 +148,7 @@ export const useLesson = create<LessonState>()(
           links: keep.links,
           stageMinutes: keep.stageMinutes,
           teamNames: keep.teamNames,
+          teamMembers: keep.teamMembers,
           sound: keep.sound,
           homeworkVariant: keep.homeworkVariant,
           rubric: keep.rubric,
@@ -153,6 +162,21 @@ export const useLesson = create<LessonState>()(
       name: 'ashyk-sabak-winforms-v2',
       storage: safeStorage,
       partialize: ({ panelOpen: _p, ...rest }) => rest,
+      // v1: группы WriteLine / ReadLine и составы групп
+      version: 1,
+      migrate: (persisted, version) => {
+        const p = (persisted ?? {}) as Partial<LessonState>
+        if (version < 1) {
+          p.teamNames = [...teamsConfig.defaultNames] as [string, string]
+          p.teamMembers = [[], []]
+          p.links = { ...defaultLinks, ...(p.links ?? {}) }
+        }
+        return p as LessonState
+      },
+      merge: (persisted, current) => {
+        const p = (persisted ?? {}) as Partial<LessonState>
+        return { ...current, ...p, links: { ...current.links, ...(p.links ?? {}) } }
+      },
     },
   ),
 )

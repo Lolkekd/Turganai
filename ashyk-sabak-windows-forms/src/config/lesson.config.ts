@@ -66,6 +66,7 @@ export const links = {
   baamboozle: 'https://www.baamboozle.com/game/4937714', // [WORD, новая редакция]
   learningApps: 'https://learningapps.org/display?v=psy2rey9k21', // [WORD]
   genially: 'https://view.genially.com/6adb30353d3e01e6f53986d3', // [WORD, новая редакция]
+  wheel: 'https://wheelofnames.com/ru/kr4-w7r', // колесо фортуны на слайде «Топқа бөлу»
 }
 
 /* ---------------------------------------------------------------------------
@@ -106,29 +107,17 @@ export const organization = {
 }
 
 /* ---------------------------------------------------------------------------
- *  ЭТАП 2. ТОПҚА БӨЛУ
- *  [WORD] «Сүйікті программаңызды таңдаңыз» — 12 карточек приложений.
- *  Логотипы брендов не используются — только названия и цвета.
+ *  ЭТАП 2. ТОПҚА БӨЛУ — две заранее определённые группы (по просьбе преподавателя)
+ *  Составы групп вписываются прямо на слайде (кнопка ✎ на карточке группы)
+ *  и сохраняются в браузере. Здесь можно задать составы по умолчанию.
  * ------------------------------------------------------------------------- */
 export const teamsConfig = {
-  prompt: 'Сүйікті программаңызды таңдаңыз',
-  wish: 'Бір-бірімізге сәттілік тілейік!',
-  // [ПРЕДЛ.] названия команд; меняются в панели преподавателя
-  defaultNames: ['C# Шеберлері', 'Form Builders'] as [string, string],
-  apps: [
-    { name: 'WhatsApp', color: '#25a244', icon: 'MessageCircle' },
-    { name: 'Instagram', color: '#a53fb8', icon: 'Camera' },
-    { name: 'YouTube', color: '#d62828', icon: 'Play' },
-    { name: 'Play Market', color: '#5b6b7f', icon: 'Store' },
-    { name: 'App Store', color: '#1f6fe0', icon: 'LayoutGrid' },
-    { name: 'Telegram', color: '#229ed9', icon: 'Send' },
-    { name: 'Spotify', color: '#1aa34a', icon: 'Music' },
-    { name: 'Snapchat', color: '#e6c800', icon: 'Ghost' },
-    { name: 'CapCut', color: '#3a3f47', icon: 'Scissors' },
-    { name: 'TikTok', color: '#111111', icon: 'Clapperboard' },
-    { name: '2GIS', color: '#2f9e44', icon: 'Map' },
-    { name: 'ChatGPT', color: '#10a37f', icon: 'Bot' },
-  ],
+  title: 'Топтарға бөліну',
+  subtitle: 'Әр топтың құрамымен танысайық!',
+  wish: 'Бір-бірімізге сәттілік тілейік!', // [WORD]
+  defaultNames: ['WriteLine', 'ReadLine'] as [string, string],
+  // Составы по умолчанию (пусто — преподаватель впишет имена на слайде)
+  defaultMembers: [[], []] as [string[], string[]],
 }
 
 /* ---------------------------------------------------------------------------
