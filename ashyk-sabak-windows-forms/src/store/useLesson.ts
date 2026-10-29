@@ -49,6 +49,12 @@ interface LessonState {
 
 const defaultMinutes = Object.fromEntries(stages.map((s) => [s.id, s.minutes])) as Record<StageId, number>
 
+// Студенты для листа оценивания — из составов групп (по порядку: 1-топ, затем 2-топ)
+const rosterStudents = (): Student[] =>
+  teamsConfig.defaultMembers.flatMap((list, t) =>
+    list.map((name, k) => ({ id: `t${t + 1}-${k + 1}`, name, bank: 0, scores: {} })),
+  )
+
 const initial = () => ({
   slide: 0,
   direction: 1 as const,
@@ -65,7 +71,7 @@ const initial = () => ({
   rubricConfirmed: false,
   lessonTimer: { elapsedMs: 0, runningSince: null },
   timers: {} as Record<string, TimerState>,
-  students: [] as Student[],
+  students: rosterStudents(),
   slideState: {} as Record<string, unknown>,
 })
 
@@ -163,13 +169,22 @@ export const useLesson = create<LessonState>()(
       storage: safeStorage,
       partialize: ({ panelOpen: _p, ...rest }) => rest,
       // v1: группы WriteLine / ReadLine и составы групп
-      version: 1,
+      version: 2,
       migrate: (persisted, version) => {
         const p = (persisted ?? {}) as Partial<LessonState>
         if (version < 1) {
           p.teamNames = [...teamsConfig.defaultNames] as [string, string]
           p.teamMembers = [[], []]
           p.links = { ...defaultLinks, ...(p.links ?? {}) }
+        }
+        if (version < 2) {
+          // v2: встроенные составы групп и список студентов для оценивания
+          const m = p.teamMembers ?? [[], []]
+          p.teamMembers = [
+            m[0]?.length ? m[0] : [...teamsConfig.defaultMembers[0]],
+            m[1]?.length ? m[1] : [...teamsConfig.defaultMembers[1]],
+          ]
+          if (!p.students?.length) p.students = rosterStudents()
         }
         return p as LessonState
       },

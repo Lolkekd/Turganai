@@ -108,9 +108,12 @@ export default function Assessment() {
 
 function NameInput({ s, i }: { s: Student; i: number }) {
   const update = useLesson((st) => st.updateStudent)
+  // студенты из составов групп имеют id вида t1-3 / t2-7
+  const team = s.id.startsWith('t1-') ? 0 : s.id.startsWith('t2-') ? 1 : -1
   return (
     <div className="flex min-w-0 items-center gap-3">
       <span className="w-7 text-right font-mono text-[16px] text-muted">{i + 1}</span>
+      {team >= 0 && <span className="h-3 w-3 shrink-0 rounded-full" title={`${team + 1}-топ`} style={{ background: TEAM_COLORS[team as 0 | 1] }} />}
       <input value={s.name} placeholder="Аты-жөні" onChange={(e) => update(s.id, { name: e.target.value })}
         className="min-w-0 flex-1 rounded-xl border border-line px-3 py-2 text-[20px] font-semibold text-navy placeholder:font-normal placeholder:text-[#a0aec0]" />
     </div>

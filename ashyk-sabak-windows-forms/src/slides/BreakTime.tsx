@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { ChevronLeft, ChevronRight, Frown, Brain, HandFist, Laugh, RotateCcw, Trophy, Music } from 'lucide-react'
+import { Check, ChevronLeft, ChevronRight, Image as ImageIcon, Frown, Brain, HandFist, Laugh, RotateCcw, Trophy, Music } from 'lucide-react'
 import { breakTime } from '../config/lesson.config'
 import { useSlideState } from '../store/useLesson'
 import { DocFigure, Slide, SlideHeader, TaskTimer } from '../components/ui'
@@ -12,9 +13,15 @@ const COLORS = [C.teal, C.coral, C.blue, C.orange, C.violet]
 const CODE = ['Build succeeded ✓', 'Console.WriteLine("…")  ← ;', 'button1_Click ✕', 'Error → Fixed ✓', 'Қосымша сәтті жұмыс істейді!']
 
 export default function BreakTime() {
-  const [idx, setIdx] = useSlideState('break.idx', -1)
+  const [rawIdx, setIdx] = useSlideState('break.idx', 0)
+  const idx = Math.max(0, rawIdx) // слайд всегда открывается с ситуации (без экрана «Бастау»)
   const total = breakTime.situations.length
-  const go = (i: number) => { setIdx(Math.max(-1, Math.min(total - 1, i))); play(i === total - 1 ? 'success' : 'reveal') }
+  // Картинка ситуации показывается только после нажатия кнопки действия.
+  // Локальное состояние: сбрасывается при каждом входе на слайд и при смене ситуации.
+  const [isImageRevealed, setIsImageRevealed] = useState(false)
+  useEffect(() => { setIsImageRevealed(false) }, [idx])
+  const go = (i: number) => { setIsImageRevealed(false); setIdx(Math.max(0, Math.min(total - 1, i))); play(i === total - 1 ? 'success' : 'reveal') }
+  const reveal = () => { if (!isImageRevealed) { setIsImageRevealed(true); play('reveal') } }
   const cur = idx >= 0 ? breakTime.situations[idx] : null
   const Icon = idx >= 0 ? ICONS[idx] : Music
   const color = idx >= 0 ? COLORS[idx] : C.violet
@@ -56,10 +63,13 @@ export default function BreakTime() {
                         «{cur.say}»
                         <span className="absolute -left-4 bottom-8 h-8 w-8 rotate-45 bg-white" />
                       </div>
-                      <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}
-                        className="mt-6 inline-flex items-center gap-3 rounded-2xl bg-white/20 px-6 py-3 text-[32px] font-bold">
+                      <motion.button type="button" onClick={reveal} aria-pressed={isImageRevealed}
+                        initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}
+                        whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                        className="mt-6 inline-flex items-center gap-3 rounded-2xl bg-white/20 px-6 py-3 text-left text-[32px] font-bold ring-2 ring-white/40 transition hover:bg-white/30">
                         → {cur.move}
-                      </motion.div>
+                        {isImageRevealed ? <Check size={30} className="shrink-0" /> : <ImageIcon size={28} className="shrink-0 opacity-80" />}
+                      </motion.button>
                       <div className="mt-5 font-mono text-[22px] text-white/80">{CODE[idx]}</div>
                     </>
                   ) : (
@@ -76,7 +86,7 @@ export default function BreakTime() {
 
           {/* управление и прогресс */}
           <div className="mt-6 flex items-center gap-3">
-            <button type="button" className="btn btn-ghost h-16 w-16" disabled={idx < 0} onClick={() => go(idx - 1)} aria-label="Артқа"><ChevronLeft size={28} /></button>
+            <button type="button" className="btn btn-ghost h-16 w-16" disabled={idx <= 0} onClick={() => go(idx - 1)} aria-label="Артқа"><ChevronLeft size={28} /></button>
             <div className="flex flex-1 gap-2.5">
               {breakTime.situations.map((s, i) => {
                 const I = ICONS[i]
@@ -94,7 +104,7 @@ export default function BreakTime() {
                 {idx < 0 ? 'Бастау' : 'Келесі'} <ChevronRight size={26} />
               </button>
             ) : (
-              <button type="button" className="btn btn-ghost h-16 px-6 text-[20px]" onClick={() => setIdx(-1)}><RotateCcw size={22} /> Қайта</button>
+              <button type="button" className="btn btn-ghost h-16 px-6 text-[20px]" onClick={() => go(0)}><RotateCcw size={22} /> Қайта</button>
             )}
           </div>
         </div>
@@ -104,25 +114,23 @@ export default function BreakTime() {
           <div className="relative flex-1 overflow-hidden rounded-[34px] border-[6px] border-white bg-white shadow-lift"
             style={{ boxShadow: `0 26px 50px -26px ${color}` }}>
             <AnimatePresence initial={false}>
-              {cur ? (
+              {cur && isImageRevealed ? (
                 <motion.img
                   key={cur.image}
                   src={cur.image}
                   alt={`${idx + 1}-жағдай: ${cur.say}`}
                   className="absolute inset-0 h-full w-full object-contain p-2"
-                  initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.03 }}
-                  transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.03 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 />
               ) : (
-                <motion.div key="start" className="absolute inset-0 grid place-items-center"
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
-                  {/* веер из пяти карточек-превью */}
-                  <div className="relative h-[300px] w-[420px]">
-                    {breakTime.situations.map((s, i) => (
-                      <img key={s.image} src={s.image} alt="" className="absolute left-1/2 top-1/2 h-[220px] w-[190px] rounded-[20px] border-4 border-white object-cover shadow-card"
-                        style={{ transform: `translate(-50%, -50%) translateX(${(i - 2) * 62}px) rotate(${(i - 2) * 7}deg)`, zIndex: 5 - Math.abs(i - 2) }} />
-                    ))}
-                  </div>
+                <motion.div key={`hidden-${idx}`} className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-10 text-center"
+                  style={{ background: `linear-gradient(160deg, white, ${color}12)` }}
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
+                  <span className="grid h-28 w-28 place-items-center rounded-[30px] border-[3px] border-dashed" style={{ borderColor: `${color}66`, color }}>
+                    <ImageIcon size={56} strokeWidth={1.6} />
+                  </span>
+                  <span className="max-w-[440px] text-[26px] font-semibold leading-snug text-navy">Суретті көру үшін әрекет батырмасын басыңыз</span>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -133,10 +141,8 @@ export default function BreakTime() {
             )}
           </div>
           <div className="flex items-center gap-3">
-            {cur ? (
+            {cur && isImageRevealed && (
               <DocFigure key={cur.image} src={cur.image} caption={`${idx + 1}-жағдай: «${cur.say}» — ${cur.move}`} label="Үлкейту" />
-            ) : (
-              <span className="text-[18px] text-muted">«Бастау» батырмасын басыңыз</span>
             )}
           </div>
         </motion.div>

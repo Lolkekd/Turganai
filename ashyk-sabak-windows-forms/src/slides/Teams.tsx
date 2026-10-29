@@ -280,9 +280,14 @@ function GroupEditor({ index, name, onClose }: { index: 0 | 1; name: string; onC
           </AnimatePresence>
           <div className="flex items-center justify-between text-[16px] text-muted">
             <span>Өзгерістер автоматты түрде осы браузерде сақталады.</span>
+            <span className="flex items-center gap-5">
+            {list.join('|') !== teamsConfig.defaultMembers[index].join('|') && (
+              <button type="button" className="font-semibold text-navy hover:underline" onClick={() => { save([...teamsConfig.defaultMembers[index]]); setConfirmClear(false) }}>Бастапқы тізімді қайтару</button>
+            )}
             {list.length > 0 && (!confirmClear
               ? <button type="button" className="font-semibold text-[#b91c1c] hover:underline" onClick={() => setConfirmClear(true)}>Тізімді тазалау</button>
               : <span className="flex gap-3"><button type="button" className="font-bold text-[#b91c1c]" onClick={() => { save([]); setConfirmClear(false) }}>Иә, тазалау</button><button type="button" className="font-semibold" onClick={() => setConfirmClear(false)}>Болдырмау</button></span>)}
+            </span>
           </div>
         </div>
       </motion.div>
