@@ -21,7 +21,7 @@ const TEAM_STYLE = [
 ] as const
 
 /** Окно поверх всей сцены (перекрывает таймер и навигацию) */
-function Overlay({ children, onClose }: { children: ReactNode; onClose: () => void }) {
+export function Overlay({ children, onClose }: { children: ReactNode; onClose: () => void }) {
   const root = typeof document !== 'undefined' ? document.getElementById('stage-overlay-root') : null
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
