@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { MessageSquareText, Play, RotateCcw } from 'lucide-react'
+import { Bot, MessageSquareText, Play, RotateCcw } from 'lucide-react'
 import { useSlideState } from '../store/useLesson'
 import { CodeBlock, DemoNote, DocFigure, FormIcon, Slide, SlideHeader, TaskTimer, WinWindow } from '../components/ui'
 import { DialogBox, DialogIcon, WinDialog, type DlgIcon } from '../components/WinDialog'
 import { play } from '../lib/sound'
+import { VideoModal } from '../components/VideoModal'
+import { lessonInfo } from '../config/lesson.config'
 
 /* ======================= Теория ======================= */
 const SIGNATURE = `MessageBox.Show(string text,
@@ -61,6 +63,7 @@ const TABS: { id: Tab; label: string }[] = [
 ]
 
 export function MessageBoxTheory() {
+  const [video, setVideo] = useState(false)
   const [param, setParam] = useSlideState('mb.param', 0)
   const [tab, setTab] = useSlideState<Tab>('mb.tab', 'buttons')
   const [btnSel, setBtnSel] = useSlideState('mb.btn', 2)
@@ -89,6 +92,22 @@ export function MessageBoxTheory() {
               <span className="font-mono font-bold text-violet">{PARAMS[param].k}</span> — {PARAMS[param].d}
             </motion.div>
           </AnimatePresence>
+          <motion.button
+            type="button" onClick={() => { setVideo(true); play('reveal') }}
+            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+            whileHover={{ y: -4 }} whileTap={{ scale: 0.97 }}
+            className="relative mt-auto flex items-center gap-5 overflow-hidden rounded-[26px] px-7 py-5 text-left text-white"
+            style={{ background: 'linear-gradient(120deg, #7c3aed, #2563eb 60%, #0fb5a6)', boxShadow: '0 20px 40px -18px #7c3aed' }}
+          >
+            <span className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10" />
+            <span className="relative grid h-[76px] w-[76px] shrink-0 place-items-center rounded-full bg-white text-violet shadow-lift">
+              <Play size={36} fill="currentColor" className="ml-1" />
+            </span>
+            <span className="relative">
+              <span className="flex items-center gap-2 text-[17px] font-bold uppercase tracking-[0.14em] text-white/80"><Bot size={20} /> ЖИ түсіндіреді</span>
+              <span className="block text-[30px] font-extrabold leading-tight">Тақырып бойынша бейнеролик</span>
+            </span>
+          </motion.button>
         </div>
 
         <div className="flex flex-col">
@@ -167,6 +186,7 @@ export function MessageBoxTheory() {
           </AnimatePresence>
         </div>
       </div>
+      <VideoModal open={video} src={lessonInfo.topicVideo} title="ЖИ түсіндіреді: енгізу және шығару сұқбаттық терезелері" onClose={() => setVideo(false)} />
     </Slide>
   )
 }

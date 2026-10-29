@@ -28,6 +28,9 @@ export const lessonInfo = {
   /** Фото преподавателя. Положите файл в public/images/teacher.jpg
    *  (в готовой сборке — presentation/images/teacher.jpg). */
   teacherPhoto: 'images/teacher.jpg',
+  /** Видео ИИ с объяснением темы (слайд «Енгізу және шығару сұқбаттық терезелері»).
+   *  Файл: public/videos/topic-ai.mp4 (в сборке — presentation/videos/topic-ai.mp4). */
+  topicVideo: 'videos/topic-ai.mp4',
 }
 
 /* ---------------------------------------------------------------------------

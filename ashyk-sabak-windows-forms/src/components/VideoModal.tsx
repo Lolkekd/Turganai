@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'motion/react'
 import { FileVideo, Maximize, Play, X } from 'lucide-react'
 import { C } from './brand'
@@ -8,11 +9,12 @@ import { play } from '../lib/sound'
 export function VideoModal({ open, src, title, color = C.violet, onClose }: {
   open: boolean; src: string; title: string; color?: string; onClose: () => void
 }) {
-  return (
+  const root = typeof document !== 'undefined' ? document.getElementById('stage-overlay-root') : null
+  const node = (
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-50 grid place-items-center bg-navy/45 backdrop-blur-md"
+          className="pointer-events-auto absolute inset-0 grid place-items-center bg-navy/45 backdrop-blur-md"
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}
         >
           <motion.div
@@ -27,6 +29,7 @@ export function VideoModal({ open, src, title, color = C.violet, onClose }: {
       )}
     </AnimatePresence>
   )
+  return root ? createPortal(node, root) : node
 }
 
 function Player({ src, title, color, onClose }: { src: string; title: string; color: string; onClose: () => void }) {
